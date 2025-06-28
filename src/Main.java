@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         System.setProperty("org.graphstream.ui", "swing");
 
+        /**Cuidado, porque Matias no es lo mismo que Matías*/
         GDP g = new GDP();
         g.crearPersona("Lucas", 9, 8, "Bombero", "luks09@gmail.com");
         g.crearPersona("Ema", 1, 3, "Estudiante", "emmma3@gmail.com");
@@ -25,6 +26,10 @@ public class Main {
         g.amigar("Sofía", "Valentina", "05062023");
         g.amigar("Lucas", "Fernanda", "01112023");
         g.amigar("Lucas", "Ema", "28062025");
+
+        g.bloquear("Matías", "Tomás", "01072025");
+
+        g.amigar("Tomás", "Isidora", "14072025");
 
         g.getListaAdyacencia();
         g.visualizar();

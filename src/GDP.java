@@ -123,12 +123,28 @@ public class GDP {
     /**
      * Establecer que p1 y p2 están bloqueados mutuamente (p1 bloqueó a p2 y p2 bloqueó a p1). Mi duda es, si es que
      * es un estado bidireccional o solo poner que p1 bloquea a p2 y que p2 ya no es amigo de p1
+     *
+     * Consideraremos que si p1 bloquea a p2, se establece una relacion unidireccinal donde queda registro de que
+     * p1 bloqueo a p2 y p2 deja de ser amigo de p1
      */
-    public void bloquear(int p1, int p2, String fecha) {
-        if (!(exists(p1) && exists(p2))) return;
+    public void bloquear(String ps1, String ps2, String fecha) {
+        int p1 = getId(ps1);
+        int p2 = getId(ps2);
+        if (p1 == -1 || p2 == -1) return;
+
         fecha = fecha + "/1";
 
+        // Eliminar la amistad (si existe) en ambos sentidos
+        grafo[p1].removeIf(a -> a.id == p2);
+        grafo[p2].removeIf(a -> a.id == p1);
+
+        // Establecer el bloqueo desde p1 hacia p2
+        grafo[p1].add(new Arista(p2, fecha));
+
+        // Se podría pulir:
+        // - Mostrar en consola el bloqueo con fecha y nombres
     }
+
 
     /**
      * Encontrar las personas que estarán de cumpleaños dentro de los próximos k días. Enviar correo a sus amigos directos
@@ -184,18 +200,24 @@ public class GDP {
                 String reverseId = a.id + "-" + i;
 
                 boolean esAmistad = a.serial.endsWith("0");
+                boolean yaExiste = g.getEdge(id) != null || g.getEdge(reverseId) != null;
 
-                // Evita duplicar amistades (no dirigidas)
-                if (esAmistad && g.getEdge(reverseId) != null) continue;
-
-                // Crea arista, con dirección si no es amistad
-                g.addEdge(id, String.valueOf(i), String.valueOf(a.id), !esAmistad)
-                        .setAttribute("ui.label", a.serial);
+                if (esAmistad) {
+                    // Para amistad, solo agregar una arista no dirigida si aún no existe
+                    if (!yaExiste)
+                        g.addEdge(id, String.valueOf(i), String.valueOf(a.id), false)
+                                .setAttribute("ui.label", a.serial);
+                } else {
+                    // Para bloqueo, agregar arista dirigida desde i hacia a.id
+                    g.addEdge(id, String.valueOf(i), String.valueOf(a.id), true)
+                            .setAttribute("ui.label", a.serial);
+                }
             }
         }
 
         g.display();
     }
+
 
     // Funciones privadas ----------------------------------------------------------------------------------------------
     private boolean exists(int p) { // Verifica si la persona existe en el sistema
@@ -221,7 +243,7 @@ public class GDP {
         return null;
     }
 
-    //  Métodos para testear
+    //  Métodos para testear -------------------------------------------------------------------------------------------
     public void getPersonas() {
         for (int i = 0; i < personas.length; i++) {
             if (personas[i] != null) System.out.println(personas[i]);

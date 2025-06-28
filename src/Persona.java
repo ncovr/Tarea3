@@ -16,6 +16,6 @@ public class Persona {
     }
 
     public String toString() {
-        return nombre+" \tid: "+id;
+        return nombre;
     }
 }

@@ -1,5 +1,6 @@
 // Grafo no dirigido ponderado
 
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.LinkedList;
 import org.graphstream.graph.Graph;
@@ -74,6 +75,10 @@ public class GDP {
     /**
      * Para que p1 y p2 sean amigos, se debe establecer la relación en el grafo, creando una arista bidireccional con
      * peso, donde el peso es la serial (fecha más digito de estado: amistad/bloqueo)
+     *
+     * Corregir: es mejor que en vez de usar nombres se usen identificadores porque podriamos tener, por ejemplo,
+     * a dos personas con el mismo nombre en el sistema, y esto podía afectar al programa ya que ambos nombres podrían
+     * ser dos personas totalmente distintas
      */
     public void amigar(String ps1, String ps2, String fecha) {
         int p1 = getId(ps1);

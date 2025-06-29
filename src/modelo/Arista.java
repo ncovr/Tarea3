@@ -9,6 +9,7 @@ public class Arista {
         this.serial = serial;
     }
 
+    @Override
     public String toString() {
         return "(" + id + ", " + serial + ")";
     }

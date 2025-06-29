@@ -9,7 +9,7 @@ public class Main {
     }
 
     private static void debugGeneralInformation() {
-        System.out.println("""
+        System.out.print("""
                 COMPILACIÓN 1, 28 DE JUNIO DE 2025
                 HORA: 9:40 PM
                 PROGRAMA EN ESTADO NO FUNCIONAL! REVISAR LISTA DE PENDIENTES (todo)

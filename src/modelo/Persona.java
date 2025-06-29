@@ -1,3 +1,5 @@
+package modelo;
+
 public class Persona {
     int id;
     String nombre;
@@ -15,6 +17,7 @@ public class Persona {
         this.email = email;
     }
 
+    @Override
     public String toString() {
         return nombre;
     }

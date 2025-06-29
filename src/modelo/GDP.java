@@ -1,52 +1,16 @@
-// Grafo no dirigido ponderado
+package modelo;// Grafo no dirigido ponderado
 
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.LinkedList;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
 public class GDP {
-    class Arista {
-        int id;
-        String serial;
-
-        public Arista(int id, String serial) {
-            this.id = id;
-            this.serial = serial;
-        }
-
-        public String toString() {
-            return "(" + id + ", " + serial + ")";
-        }
-    }
-
-    /**
-     * Esta es la clase que representa un grafo dirigido ponderado, el cual funciona como un grafo común y corriente
-     * pero al aplicar operaciones se interpretan los nodos como personas, usando 'personas' a modo de diccionario
-     */
-
     private Persona[] personas = new Persona[2]; // Diccionario de personas
     private LinkedList<Arista>[] grafo = new LinkedList[2]; // Lista de adyacencia para representar el grafo
     private int idCounter = 1; // Ayuda a generar Id's en orden correlativo según se van creando nuevas personas
-
-    /**
-     * Por ejemplo, supongamos que existe una conexión entre '1' y '2', donde el peso (serial) finaliza en 0.
-     * Esto significa, usando el diccionario de personas, que la persona con Id = 1 y persona con Id = 2 son amigos
-     * en una fecha determinada
-     *
-     * El peso de la arista es una serial generada automáticamente según los parámetros otorgados al crear la persona.
-     * La estructura de la serial sería que los primeros 8 carácteres representan la fecha tipo DíaMesAño y el noveno
-     * carácter, representa la relación entre las personas, donde si es 0 indica amistad; si es 1 indica que las
-     * personas se bloquearon
-     */
-
-    /**
-     * Lo anterior, viéndolo a partir de la estructura del código: si tenemos grafo[1] = {(2, 010120190), (3, 010120231)}
-     * significaria que la persona id = 1 se hizo amiga de persona id = 2 el 01012019 y que bloqueó a la persona id = 3 el
-     * 01012023
-     */
 
     /**
      * Dado que el grafo es dirigido, cuando se inicia una amistad, se crea una conexión bidireccional, pero cuando p1
@@ -56,7 +20,22 @@ public class GDP {
     public GDP() {
     }
 
-    public void crearPersona(String nombre, int dia, int mes, String ocupacion, String email) {
+    /*
+     * Por ejemplo, supongamos que existe una conexión entre '1' y '2', donde el peso (serial) finaliza en 0.
+     * Esto significa, usando el diccionario de personas, que la persona con Id = 1 y persona con Id = 2 son amigos
+     * en una fecha determinada.
+     * El peso de la arista es una serial generada automáticamente según los parámetros otorgados al crear la persona.
+     * La estructura de la serial sería que los primeros 8 carácteres representan la fecha tipo DíaMesAño y el noveno
+     * carácter, representa la relación entre las personas, donde si es 0 indica amistad; si es 1 indica que las
+     * personas se bloquearon
+     */
+    /*
+     * Lo anterior, viéndolo a partir de la estructura del código: si tenemos grafo[1] = {(2, 010120190), (3, 010120231)}
+     * significaria que la persona id = 1 se hizo amiga de persona id = 2 el 01012019 y que bloqueó a la persona id = 3 el
+     * 01012023
+     */
+
+    public void func_createPersona(String nombre, int dia, int mes, String ocupacion, String email) {
         Persona p = new Persona(idCounter, nombre, dia, mes, ocupacion, email);
         if (idCounter >= grafo.length) {
             grafo = Arrays.copyOf(grafo, grafo.length + 1);
@@ -75,12 +54,13 @@ public class GDP {
     /**
      * Para que p1 y p2 sean amigos, se debe establecer la relación en el grafo, creando una arista bidireccional con
      * peso, donde el peso es la serial (fecha más digito de estado: amistad/bloqueo)
-     *
+     * <p>
      * Corregir: es mejor que en vez de usar nombres se usen identificadores porque podriamos tener, por ejemplo,
      * a dos personas con el mismo nombre en el sistema, y esto podía afectar al programa ya que ambos nombres podrían
      * ser dos personas totalmente distintas
      */
-    public void amigar(String ps1, String ps2, String fecha) {
+
+    public void func_friendsPersona(String ps1, String ps2, String fecha) {
         int p1 = getId(ps1);
         int p2 = getId(ps2);
         if (p1 == -1 || p2 == -1) return;
@@ -91,15 +71,16 @@ public class GDP {
         grafo[p2].add(new Arista(p1, fecha));
 
         // Enviar correos
-        correos(p1, p2, fecha);
+        func_sendEmail(p1, p2, fecha);
     }
 
     /**
      * Se debe enviar un correo a los vecinos de p1 diciendo que es posible que conozca a p2, y al revés
      */
-    public void correos(int p1, int p2, String fecha) {
+
+    private void func_sendEmail(int p1, int p2, String fecha) {
         // Para cada vecino, imprimir el mensaje
-        System.out.println("¡Ahora "+getNombre(p1)+" y "+getNombre(p2)+" son amigos! ("+fecha+")");
+        System.out.println("¡Ahora " + getNombre(p1) + " y " + getNombre(p2) + " son amigos! (" + fecha + ")");
         System.out.println("Correo para los amigos de " + personas[p1].nombre);
         for (Arista a : grafo[p1]) {
             if (a.id == p2) continue;
@@ -128,11 +109,12 @@ public class GDP {
     /**
      * Establecer que p1 y p2 están bloqueados mutuamente (p1 bloqueó a p2 y p2 bloqueó a p1). Mi duda es, si es que
      * es un estado bidireccional o solo poner que p1 bloquea a p2 y que p2 ya no es amigo de p1
-     *
+     * <p>
      * Consideraremos que si p1 bloquea a p2, se establece una relacion unidireccinal donde queda registro de que
      * p1 bloqueo a p2 y p2 deja de ser amigo de p1
      */
-    public void bloquear(String ps1, String ps2, String fecha) {
+
+    public void func_blockFriend(String ps1, String ps2, String fecha) {
         int p1 = getId(ps1);
         int p2 = getId(ps2);
         if (p1 == -1 || p2 == -1) return;
@@ -150,23 +132,26 @@ public class GDP {
         // - Mostrar en consola el bloqueo con fecha y nombres
     }
 
-
     /**
      * Encontrar las personas que estarán de cumpleaños dentro de los próximos k días. Enviar correo a sus amigos directos
      */
-    public void cumple(int k) {
 
+    public void func_birthdayDayFind(int k) {
+        //todo IMPLEMENTAR METODO PENDIENTE!
     }
 
     /**
      * Encontrar el 'na' entre p1 y p2
      */
-    public void nivelDeAmistad(int p1, int p2) {
+
+    public void func_friendshipLevel(int p1, int p2) {
         if (!(exists(p1) && exists(p2))) return;
+
+        //todo IMPLEMENTAR METODO PENDIENTE!
 
     }
 
-    public void visualizar() {
+    public void debug_graphVisualizer() {
         Graph g = new SingleGraph("Grafo de Personas");
         g.setStrict(false);
         g.setAutoCreate(true);
@@ -223,8 +208,8 @@ public class GDP {
         g.display();
     }
 
+    // --------------------------- FUNCIONES AUXILIARES PARA AYUDAR CON LA EJECUCIÓN DE LOS MÉTODOS ---------------------------
 
-    // Funciones privadas ----------------------------------------------------------------------------------------------
     private boolean exists(int p) { // Verifica si la persona existe en el sistema
         if (p <= 0 || p >= personas.length) return false;
         for (int i = 1; i < personas.length; i++) {
@@ -241,27 +226,27 @@ public class GDP {
         return -1;
     }
 
-    private String getNombre(int id){
-        for (int i = 0; i < personas.length; i++) {
-            if (personas[i] != null && personas[i].id == id) return personas[i].nombre;
+    private String getNombre(int id) {
+        for (Persona persona : personas) {
+            if (persona != null && persona.id == id) return persona.nombre;
         }
         return null;
     }
 
     //  Métodos para testear -------------------------------------------------------------------------------------------
     public void getPersonas() {
-        for (int i = 0; i < personas.length; i++) {
-            if (personas[i] != null) System.out.println(personas[i]);
+        for (Persona persona : personas) {
+            if (persona != null) System.out.println(persona);
         }
     }
 
     // Para visualizar la lista de adyacencia
-    public void getListaAdyacencia(){
+    public void getListaAdyacencia() {
         System.out.println("Lista de Adyacencia");
         for (int i = 1; i < grafo.length; i++) {
-            System.out.print(personas[i]+": ");
+            System.out.print(personas[i] + ": ");
             for (Arista a : grafo[i]) {
-                System.out.print(personas[a.id]+"  ");
+                System.out.print(personas[a.id] + "  ");
             }
             System.out.println();
         }

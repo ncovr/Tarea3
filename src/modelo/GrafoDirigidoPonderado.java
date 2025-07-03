@@ -7,7 +7,7 @@ import org.graphstream.graph.implementations.SingleGraph;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class GDP {
+public class GrafoDirigidoPonderado {
     private Persona[] personas = new Persona[2]; // Diccionario de personas
     private LinkedList<Arista>[] grafo = new LinkedList[2]; // Lista de adyacencia para representar el grafo
     private int idCounter = 1; // Ayuda a generar Id's en orden correlativo según se van creando nuevas personas
@@ -17,7 +17,7 @@ public class GDP {
      * bloquea a p2, se crea esa conexión unidireccional, y luego p2 ya no está conectado con p1
      */
 
-    public GDP() {
+    public GrafoDirigidoPonderado() {
     }
 
     /*

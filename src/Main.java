@@ -9,14 +9,12 @@ public class Main {
 
     private static void debugGeneralInformation() {
         System.out.print("""
-                COMPILACIÓN 1, 28 DE JUNIO DE 2025
-                HORA: 9:40 PM
+                COMPILACIÓN 2, 03 DE JUNIO DE 2025
+                HORA: 3: 57 AM
                 PROGRAMA EN ESTADO NO FUNCIONAL! REVISAR LISTA DE PENDIENTES (todo)
                 
                 PRESIONE CUALQUIER TECLA PARA CONTINUAR CON LA EJECUCIÓN DEL PROGRAMA...
                 """);
-
-        System.out.println("CHECK CODE!");
 
         try {
             System.in.read();

@@ -1,6 +1,6 @@
 package vista;
 
-import modelo.GDP;
+import modelo.GrafoDirigidoPonderado;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class VistaLoader {
 
     public Scanner sc = new Scanner(System.in);
-    public GDP g = new GDP();
+    public GrafoDirigidoPonderado g = new GrafoDirigidoPonderado();
 
     public void menu() {
         int opcion;

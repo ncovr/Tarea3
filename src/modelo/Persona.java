@@ -21,4 +21,12 @@ public class Persona {
     public String toString() {
         return nombre;
     }
+
+    public String getFechaCumple() {
+        return dia + "/" + mes;
+    }
+
+    public String getCorreosElectronicos(){
+        return email;
+    }
 }

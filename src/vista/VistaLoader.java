@@ -13,56 +13,65 @@ public class VistaLoader {
     public GrafoDirigidoPonderado g = new GrafoDirigidoPonderado();
 
     public void menu() {
-        int opcion;
-        // SI LLEGAN A COLGAR ESTA MIERDA DE CODIGO, LE PLANTARE UNA PATADA EN LA RAJA A TU MAMITA
+        while (true) {
+            int opcion = -1;
 
-        do {
             System.out.print("""
-                    ..:::: MENU PRINCIPAL ::::..
-                    1. Insertar persona
-                    2. Agregar una relación de amistad
-                    3. Bloquear a un amigo
-                    4. Encontrar a personas de cumpleaños en los proximos n dias
-                    5. Obtener el nivel de amistad entre dos amigos
-                    6. EJECUTAR FUNCIONES DEBUG
-                    
-                    7. Salir
+                    ╔══════════════════════════════════════╗
+                    ║         GESTIÓN DE AMISTADES         ║
+                    ╠══════════════════════════════════════╣
+                    ║      .:::: MENU PRINCIPAL ::::.      ║
+                    ╠══════════════════════════════════════╣
+                    ║  1. Insertar persona                 ║
+                    ║  2. Agregar una relación de amistad  ║
+                    ║  3. Bloquear a un amigo              ║
+                    ║  4. Encontrar cumpleaños próximos    ║
+                    ║  5. Nivel de amistad entre amigos    ║
+                    ║  6. Ejecutar funciones debug         ║
+                    ║  7. Salir                            ║
+                    ╚══════════════════════════════════════╝
                     """);
-            System.out.print("OPCIÓN? ");
+            System.out.print("Ingrese una opción: ");
 
             try {
                 opcion = sc.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Por favor, ingrese un número válido.");
+                System.out.println("[ERROR] Por favor, ingrese un número válido.");
                 sc.next();
-                continue;
             }
 
-            switch (opcion) {
-                case 1 -> createPersona();
-                case 2 -> linkFriendship();
-                case 3 -> blockCrazyBitchLikeYourFuckingExGirlfriend();
-                case 4 -> findBirthdayInNextNDays();
-                case 5 -> obtainFriendshipLevel();
-
-                // LO SIGUIENTE NO ES FUNDAMENTAL, PERO ES ÚTIL PARA DEBUG
-                case 6 -> debugFunc();
-
-                case 7 -> System.exit(0);
-                default -> System.out.println("Opcion incorrecta");
+            if (opcion != -1) {
+                switch (opcion) {
+                    case 1 -> createPersona();
+                    case 2 -> linkFriendship();
+                    case 3 -> blockFriendship();
+                    case 4 -> findBirthdayInNextNDays();
+                    case 5 -> obtainFriendshipLevel();
+                    case 6 -> debugFunc();
+                    case 7 -> {
+                        System.out.println("Saliendo del programa...");
+                        return;
+                    }
+                    default ->
+                            System.out.println("[ERROR] Opcion seleccionada no válida, por favor intente nuevamente.");
+                }
             }
-        } while (true);
+        }
     }
 
     private void createPersona() {
 
         try {
-            System.out.println("..:: CREAR PERSONA ::..");
-            String nombre = aux_getInput("NOMBRE DE LA PERSONA? ");
-            int diaCumple = Integer.parseInt(aux_getInput("DÍA DE CUMPLEAÑOS? "));
-            int mesCumple = Integer.parseInt(aux_getInput("MES DE CUMPLEAÑOS? "));
-            String profesion = aux_getInput("PROFESIÓN? ");
-            String email = aux_getInput("EMAIL? ");
+            System.out.print("""                            
+                    ╔══════════════════════════════════════╗
+                    ║         CREAR NUEVA PERSONA          ║
+                    ╚══════════════════════════════════════╝
+                    """);
+            String nombre = aux_getInput("Nombre de la persona? ");
+            int diaCumple = Integer.parseInt(aux_getInput("Día de cumpleaños? "));
+            int mesCumple = Integer.parseInt(aux_getInput("Mes de cumpleaños? "));
+            String profesion = aux_getInput("Profesión? ");
+            String email = aux_getInput("Email? ");
 
             g.func_createPersona(nombre, diaCumple, mesCumple, profesion, email);
 
@@ -73,28 +82,31 @@ public class VistaLoader {
 
     private void linkFriendship() {
         try {
-            System.out.println("..:: AGREGAR RELACIÓN DE AMISTAD ::..");
-            String nombre1 = aux_getInput("NOMBRE DE LA PRIMERA PERSONA? ");
-            String nombre2 = aux_getInput("NOMBRE DE LA SEGUNDA PERSONA? ");
-            String fecha = aux_getInput("FECHA DE INICIO DE LA AMISTAD (DDMMYYYY)? ");
-
+            System.out.print("""                            
+                    ╔═══════════════════════════════════════╗
+                    ║       AGREGAR RELACIÓN DE AMISTAD     ║
+                    ╚═══════════════════════════════════════╝
+                    """);
+            String nombre1 = aux_getInput("Nombre de la primera persona? ");
+            String nombre2 = aux_getInput("Nombre de la segunda persona? ");
+            String fecha = aux_getInput("Fecha de inicio de amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
             g.func_friendsPersona(nombre1, nombre2, fecha);
-
         } catch (Exception e) {
             System.out.println("Error al agregar la relación de amistad. Por favor, verifique los datos ingresados.");
         }
     }
 
-    private void blockCrazyBitchLikeYourFuckingExGirlfriend() {
-
+    private void blockFriendship() {
         try {
-            System.out.println("..:: BLOQUEAR A UN AMIGO ::..");
-            String nombre1 = aux_getInput("NOMBRE DE LA PRIMERA PERSONA? ");
-            String nombre2 = aux_getInput("NOMBRE DE LA SEGUNDA PERSONA? ");
-            String fecha = aux_getInput("FECHA DE TERMINO DE LA AMISTAD (DDMMYYYY)? ");
-
+            System.out.print("""                            
+                    ╔══════════════════════════════════════╗
+                    ║          BLOQUEAR AMIGO              ║
+                    ╚══════════════════════════════════════╝
+                    """);
+            String nombre1 = aux_getInput("Nombre de la primera persona? ");
+            String nombre2 = aux_getInput("Nombre de la segunda persona? ");
+            String fecha = aux_getInput("Fecha de termino de la amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
             g.func_blockFriend(nombre1, nombre2, fecha);
-
         } catch (Exception e) {
             System.out.println("Error al bloquear a un amigo. Por favor, verifique los datos ingresados.");
         }
@@ -104,9 +116,13 @@ public class VistaLoader {
         //todo Función terminada, pero no revisada exhaustivamente, revisar si funciona bien!
 
         try {
-            System.out.println("..:: ENCONTRAR CUMPLEAÑOS EN LOS PRÓXIMOS N DÍAS ::..");
+            System.out.print("""                            
+                    ╔══════════════════════════════════════╗
+                    ║      BUSCAR CUMPLEAÑOS PRÓXIMOS      ║
+                    ╚══════════════════════════════════════╝
+                    """);
             LocalDate fechaInicio = aux_getDate();
-            int n = Integer.parseInt(aux_getInput("¿EN CUANTOS DÍAS QUIERES BUSCAR CUMPLEAÑOS? "));
+            int n = Integer.parseInt(aux_getInput("Dentro de cuantos dias? "));
 
             g.func_birthdayDayFind(n, fechaInicio);
         } catch (Exception e) {
@@ -126,7 +142,7 @@ public class VistaLoader {
 
 
         /**
-         * Cuidado, porque Matias no es lo mismo que Matías
+         * Cuidado, porque Matias no es lo mismo que Matías //todo Revisar casos de acentos y caracteres especiales
          */
 
         g.func_createPersona("Lucas", 9, 8, "Bombero", "luks09@gmail.com");
@@ -164,30 +180,30 @@ public class VistaLoader {
     }
 
     private LocalDate aux_getDate() {
-        System.out.println("Desea usar la fecha actual como fecha de inicio");
-        String val = aux_getInput("[SI / NO]? ");
+        while(true) {
+            String val = aux_getInput("Desea usar la fecha actual como fecha de inicio [SI / NO]? ");
 
-        do {
-            switch (val) {
+            switch (val.toUpperCase()) {
                 case "SI" -> {
                     return LocalDate.now();
                 }
                 case "NO" -> {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-                    int dia = Integer.parseInt(aux_getInput("DIA? "));
-                    int mes = Integer.parseInt(aux_getInput("MES? "));
-                    int anio = Integer.parseInt(aux_getInput("AÑO? "));
-
-                    String fechaStr = String.format("%02d/%02d/%04d", dia, mes, anio);
                     try {
+                        int dia = Integer.parseInt(aux_getInput("Ingrese día? "));
+                        int mes = Integer.parseInt(aux_getInput("Ingrese mes? "));
+                        int anio = Integer.parseInt(aux_getInput("Ingrese año? "));
+                        String fechaStr = String.format("%02d/%02d/%04d", dia, mes, anio);
                         return LocalDate.parse(fechaStr, formatter);
                     } catch (Exception e) {
-                        System.out.println("Fecha inválida, por favor intente nuevamente.");
+                        System.out.println("[ERROR] Fecha inválida, por favor intente nuevamente.");
                     }
                 }
-                default -> System.out.println("Valor invalido ingresado!");
+                default -> {
+                    System.out.println("[ERROR] Valor invalido ingresado. Por favor, ingrese 'SI' o 'NO'.");
+                }
             }
-        } while (true);
+        }
     }
 }

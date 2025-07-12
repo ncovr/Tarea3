@@ -2,6 +2,8 @@ package vista;
 
 import modelo.GrafoDirigidoPonderado;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -45,6 +47,7 @@ public class VistaLoader {
 
                 // LO SIGUIENTE NO ES FUNDAMENTAL, PERO ES ÚTIL PARA DEBUG
                 case 6 -> debugFunc();
+
                 case 7 -> System.exit(0);
                 default -> System.out.println("Opcion incorrecta");
             }
@@ -98,21 +101,21 @@ public class VistaLoader {
     }
 
     private void findBirthdayInNextNDays() {
+        //todo Función terminada, pero no revisada exhaustivamente, revisar si funciona bien!
 
-        System.out.println("FUNCION NO IMPLEMENTADA, PERO AQUÍ ESTÁ EL ESQUELETO");
-        //todo TRABAJAR EN ESTA MIERDA DE FUNCION REQLIA, AHHH SON LAS 4 DE LA MAÑANA Y NO PUEDO MÁS, ME QUIERO MATAR A PAJAS
-
-        /*
         try {
             System.out.println("..:: ENCONTRAR CUMPLEAÑOS EN LOS PRÓXIMOS N DÍAS ::..");
+            LocalDate fechaInicio = aux_getDate();
             int n = Integer.parseInt(aux_getInput("¿EN CUANTOS DÍAS QUIERES BUSCAR CUMPLEAÑOS? "));
-            // g.func_findBirthdayInNextNDays(n);
+
+            g.func_birthdayDayFind(n, fechaInicio);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Error al buscar cumpleaños. Por favor, verifique los datos ingresados.");
-        }*/
+        }
     }
 
-    private void obtainFriendshipLevel(){
+    private void obtainFriendshipLevel() {
 
         System.out.println("FUNCION NO IMPLEMENTADA, PERO AQUÍ ESTÁ EL ESQUELETO");
         //todo ESTA PENDEJADA IGUAL FALTA, PONGALE WENO A LA PALA, Y DESPUES CUELGUENME DE UN ARBOL USANDO LA CORNETA
@@ -157,6 +160,34 @@ public class VistaLoader {
 
     private String aux_getInput(String texto) {
         System.out.print(texto);
-        return sc.nextLine().trim();
+        return sc.next();
+    }
+
+    private LocalDate aux_getDate() {
+        System.out.println("Desea usar la fecha actual como fecha de inicio");
+        String val = aux_getInput("[SI / NO]? ");
+
+        do {
+            switch (val) {
+                case "SI" -> {
+                    return LocalDate.now();
+                }
+                case "NO" -> {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                    int dia = Integer.parseInt(aux_getInput("DIA? "));
+                    int mes = Integer.parseInt(aux_getInput("MES? "));
+                    int anio = Integer.parseInt(aux_getInput("AÑO? "));
+
+                    String fechaStr = String.format("%02d/%02d/%04d", dia, mes, anio);
+                    try {
+                        return LocalDate.parse(fechaStr, formatter);
+                    } catch (Exception e) {
+                        System.out.println("Fecha inválida, por favor intente nuevamente.");
+                    }
+                }
+                default -> System.out.println("Valor invalido ingresado!");
+            }
+        } while (true);
     }
 }

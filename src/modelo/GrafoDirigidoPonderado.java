@@ -4,6 +4,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -136,8 +137,37 @@ public class GrafoDirigidoPonderado {
      * Encontrar las personas que estarán de cumpleaños dentro de los próximos k días. Enviar correo a sus amigos directos
      */
 
-    public void func_birthdayDayFind(int k) {
-        //todo IMPLEMENTAR METODO PENDIENTE!
+    public void func_birthdayDayFind(int k, LocalDate day) {
+        if (k <= 0 || day == null) return;
+
+        LocalDate endDate = day.plusDays(k);
+
+        System.out.println("Personas con cumpleaños en los próximos " + k + " días:");
+
+        for (Persona persona : personas) {
+            if (persona == null) continue;
+
+            LocalDate birthday = LocalDate.of(day.getYear(), persona.mes, persona.dia);
+            if (birthday.isBefore(day)) {
+                birthday = birthday.plusYears(1); // Si el cumpleaños ya pasó este año, lo buscamos para el próximo año, resuelve el problema en diciembre - enero
+            }
+
+            if (!birthday.isAfter(endDate)) {
+                System.out.println(persona.nombre + " - Cumpleaños: " + persona.getFechaCumple());
+                // Enviar correos a amigos directos
+
+                if (grafo[persona.id] == null || grafo[persona.id].isEmpty()) {
+                    System.out.println("No tiene amigos directos para enviar correos.");
+                    return;
+                }
+
+                for (Arista a : grafo[persona.id]) {
+                    Persona amigo = personas[a.id];
+                    System.out.println("Correo a " + amigo.email + ": ¡Hola " + amigo.nombre + "! " +
+                            persona.nombre + " estará de cumpleaños el " + persona.getFechaCumple() + "!");
+                }
+            }
+        }
     }
 
     /**

@@ -1,11 +1,11 @@
-package modelo;// Grafo no dirigido ponderado
+package modelo;
 
 //todo Implementar excepciones para manejar errores y mejorar la robustez del código!
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
-
+import exceptions.GrafoException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;

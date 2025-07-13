@@ -1,9 +1,12 @@
 package vista;
 
+import exceptions.GrafoException;
 import modelo.GrafoDirigidoPonderado;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.IllegalFormatException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -56,27 +59,26 @@ public class VistaLoader {
                             System.out.println("[ERROR] Opcion seleccionada no válida, por favor intente nuevamente.");
                 }
             }
-        }
+        } // Fin del bucle while
     }
 
     private void createPersona() {
-
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗
                     ║         CREAR NUEVA PERSONA          ║
                     ╚══════════════════════════════════════╝
                     """);
-            String nombre = aux_getInput("Nombre de la persona? ");
-            int diaCumple = Integer.parseInt(aux_getInput("Día de cumpleaños? "));
-            int mesCumple = Integer.parseInt(aux_getInput("Mes de cumpleaños? "));
-            String profesion = aux_getInput("Profesión? ");
-            String email = aux_getInput("Email? ");
+            String nombre = aux_getInputString("Nombre de la persona? ");
+            int diaCumple = aux_getInputInteger("Día de cumpleaños? ");
+            int mesCumple = aux_getInputInteger("Mes de cumpleaños? ");
+            String profesion = aux_getInputString("Profesión? ");
+            String email = aux_getInputString("Email? ");
 
             g.func_createPersona(nombre, diaCumple, mesCumple, profesion, email);
 
-        } catch (Exception e) {
-            System.out.println("Error al crear la persona. Por favor, verifique los datos ingresados.");
+        } catch (GrafoException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -87,12 +89,12 @@ public class VistaLoader {
                     ║       AGREGAR RELACIÓN DE AMISTAD     ║
                     ╚═══════════════════════════════════════╝
                     """);
-            String nombre1 = aux_getInput("Nombre de la primera persona? ");
-            String nombre2 = aux_getInput("Nombre de la segunda persona? ");
-            String fecha = aux_getInput("Fecha de inicio de amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
+            String nombre1 = aux_getInputString("Nombre de la primera persona? ");
+            String nombre2 = aux_getInputString("Nombre de la segunda persona? ");
+            String fecha = aux_getInputString("Fecha de inicio de amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
             g.func_friendsPersona(nombre1, nombre2, fecha);
-        } catch (Exception e) {
-            System.out.println("Error al agregar la relación de amistad. Por favor, verifique los datos ingresados.");
+        } catch (GrafoException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -103,18 +105,16 @@ public class VistaLoader {
                     ║          BLOQUEAR AMIGO              ║
                     ╚══════════════════════════════════════╝
                     """);
-            String nombre1 = aux_getInput("Nombre de la primera persona? ");
-            String nombre2 = aux_getInput("Nombre de la segunda persona? ");
-            String fecha = aux_getInput("Fecha de termino de la amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
+            String nombre1 = aux_getInputString("Nombre de la primera persona? ");
+            String nombre2 = aux_getInputString("Nombre de la segunda persona? ");
+            String fecha = aux_getInputString("Fecha de termino de la amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
             g.func_blockFriend(nombre1, nombre2, fecha);
-        } catch (Exception e) {
-            System.out.println("Error al bloquear a un amigo. Por favor, verifique los datos ingresados.");
+        } catch (GrafoException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     private void findBirthdayInNextNDays() {
-        //todo Función terminada, pero no revisada exhaustivamente, revisar si funciona bien!
-
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗
@@ -122,37 +122,38 @@ public class VistaLoader {
                     ╚══════════════════════════════════════╝
                     """);
             LocalDate fechaInicio = aux_getDate();
-            int n = Integer.parseInt(aux_getInput("Dentro de cuantos dias? "));
-
+            int n = aux_getInputInteger("Dentro de cuantos dias? ");
             g.func_birthdayDayFind(n, fechaInicio);
-        } catch (Exception e) {
+        } catch (GrafoException e) {
             System.out.println(e.getMessage());
-            System.out.println("Error al buscar cumpleaños. Por favor, verifique los datos ingresados.");
         }
     }
 
     private void obtainFriendshipLevel() {
-        System.out.print("""                            
+        try {
+            System.out.print("""                            
                     ╔══════════════════════════════════════╗
                     ║       OBTENER NIVEL DE AMISTAD       ║
                     ╚══════════════════════════════════════╝
                     """);
-
-        System.out.print("Ingrese el nombre de la primera persona: ");
-        String p1 = sc.next();
-        System.out.print("Ingrese el nombre de la segunda persona: ");
-        String p2 = sc.next();
-        System.out.println("-> "+g.func_friendshipLevel(p1,p2));
+            String p1 = aux_getInputString("Ingrese el nombre de la primera persona? ");
+            String p2 = aux_getInputString("Ingrese el nombre de la segunda persona? ");
+            g.func_friendshipLevel(p1, p2);
+        } catch (GrafoException e) {
+            System.out.println(e.getMessage());
+        }
     }
+
+    // CLASES AUXILIARES, CREADAS PARA AGILIZAR EL CÓDIGO PRINCIPAL
 
     private void debugFunc() {
         System.setProperty("org.graphstream.ui", "swing");
-
-
-        /**
-         * Cuidado, porque Matias no es lo mismo que Matías //todo Revisar casos de acentos y caracteres especiales
-         */
-
+        System.out.println("""
+                ╔══════════════════════════════════════╗
+                ║             FUNCIONES DEBUG          ║
+                ╚══════════════════════════════════════╝
+                """);
+        // Cuidado, porque Matias no es lo mismo que Matías //todo Revisar casos de acentos y caracteres especiales
         g.func_createPersona("Lucas", 9, 8, "Bombero", "luks09@gmail.com");
         g.func_createPersona("Ema", 1, 3, "Estudiante", "emmma3@gmail.com");
         g.func_createPersona("Carlos", 15, 12, "Doctor", "carlos.md@gmail.com");
@@ -182,14 +183,24 @@ public class VistaLoader {
         g.debug_graphVisualizer();
     }
 
-    private String aux_getInput(String texto) {
+    private String aux_getInputString(String texto) {
         System.out.print(texto);
         return sc.next();
     }
 
-    private LocalDate aux_getDate() {
-        while(true) {
-            String val = aux_getInput("Desea usar la fecha actual como fecha de inicio [SI / NO]? ");
+    private int aux_getInputInteger(String texto) throws GrafoException {
+        System.out.print(texto);
+
+        try {
+            return Integer.parseInt(sc.next());
+        } catch (NumberFormatException e) {
+            throw new GrafoException("[ERROR] Entrada inválida, por favor ingrese un número entero.");
+        }
+    }
+
+    private LocalDate aux_getDate() throws GrafoException {
+        while (true) {
+            String val = aux_getInputString("Desea usar la fecha actual como fecha de inicio [SI / NO]? ");
 
             switch (val.toUpperCase()) {
                 case "SI" -> {
@@ -199,18 +210,24 @@ public class VistaLoader {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                     try {
-                        int dia = Integer.parseInt(aux_getInput("Ingrese día? "));
-                        int mes = Integer.parseInt(aux_getInput("Ingrese mes? "));
-                        int anio = Integer.parseInt(aux_getInput("Ingrese año? "));
+                        int dia = aux_getInputInteger("Ingrese día? ");
+                        int mes = aux_getInputInteger("Ingrese mes? ");
+                        int anio = aux_getInputInteger("Ingrese año? ");
                         String fechaStr = String.format("%02d/%02d/%04d", dia, mes, anio);
                         return LocalDate.parse(fechaStr, formatter);
-                    } catch (Exception e) {
-                        System.out.println("[ERROR] Fecha inválida, por favor intente nuevamente.");
+
+                    } catch (GrafoException e) {
+                        throw new GrafoException(e.getMessage());
+                    } catch (IllegalFormatException e) {
+                        throw new GrafoException("[ERROR] Formato de fecha inválido. Por favor, use el formato DD/MM/YYYY.");
+                    } catch (InputMismatchException e) {
+                        throw new GrafoException("[ERROR] Entrada inválida. Por favor, ingrese números enteros para día, mes y año.");
+                    } catch (DateTimeParseException e) {
+                        throw new GrafoException("[ERROR] Error serio al retornar fecha. Avisar al desarrollador.");
                     }
                 }
-                default -> {
-                    System.out.println("[ERROR] Valor invalido ingresado. Por favor, ingrese 'SI' o 'NO'.");
-                }
+                default -> System.out.println("[ERROR] Valor invalido ingresado. Por favor, ingrese 'SI' o 'NO'.");
+
             }
         }
     }

@@ -28,7 +28,6 @@ public class Arista {
 
     @Override
     public String toString() {
-        System.out.println("(" + id + ";;;" + serial + ")");
-        return "(" + id + ";;;" + serial + ")";
+        return "(" + id + ";" + serial + ")";
     }
 }

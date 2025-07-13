@@ -1,3 +1,9 @@
+/* TRABAJO REALIZADO POR:
+ * - Nicolas Verdugo Barrera
+ * - Diego Mercado Herrera
+ * - Ariel Bobadilla Barriga
+ */
+
 package vista;
 
 import exceptions.GrafoException;
@@ -91,7 +97,8 @@ public class VistaLoader {
                     """);
             String nombre1 = aux_getInputString("Nombre de la primera persona? ");
             String nombre2 = aux_getInputString("Nombre de la segunda persona? ");
-            String fecha = aux_getInputString("Fecha de inicio de amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
+            String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+
             g.func_friendsPersona(nombre1, nombre2, fecha);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
@@ -107,7 +114,8 @@ public class VistaLoader {
                     """);
             String nombre1 = aux_getInputString("Nombre de la primera persona? ");
             String nombre2 = aux_getInputString("Nombre de la segunda persona? ");
-            String fecha = aux_getInputString("Fecha de termino de la amistad (DDMMYYYY)? "); //todo Arreglar entrada del formato de fecha
+            String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+
             g.func_blockFriend(nombre1, nombre2, fecha);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
@@ -148,12 +156,11 @@ public class VistaLoader {
 
     private void debugFunc() {
         System.setProperty("org.graphstream.ui", "swing");
-        System.out.println("""
+        System.out.print("""
                 ╔══════════════════════════════════════╗
-                ║             FUNCIONES DEBUG          ║
+                ║            FUNCIONES DEBUG           ║
                 ╚══════════════════════════════════════╝
                 """);
-        // Cuidado, porque Matias no es lo mismo que Matías //todo Revisar casos de acentos y caracteres especiales
         g.func_createPersona("Lucas", 9, 8, "Bombero", "luks09@gmail.com");
         g.func_createPersona("Ema", 1, 3, "Estudiante", "emmma3@gmail.com");
         g.func_createPersona("Carlos", 15, 12, "Doctor", "carlos.md@gmail.com");
@@ -227,8 +234,93 @@ public class VistaLoader {
                     }
                 }
                 default -> System.out.println("[ERROR] Valor invalido ingresado. Por favor, ingrese 'SI' o 'NO'.");
-
             }
         }
     }
 }
+
+/*
+¿Que esperabas encontrar aqui Orvar, la carpeta del git?
+Desde hoy dejaré liricas de canciones.
+Le quitas lo divertido a la vida, pero bueno, ya que.
+
+https://youtu.be/Soy4jGPHr3g
+
+doushite sugu shitte shimau no
+kyoushin de kurushindeshi batou
+koushin de furu inseki masshou-ka?
+warukunai
+
+kyoumi nee sukui hade kandou
+joubi nee kusuri tabe BAD
+chou hidee furu mitame angou-ka?
+kane ni yoru
+
+joushiki nee kurui ppade rantou
+houchi gee suru in kya de bando
+soushin de kurushii dame Cancel wa?
+kusa haeru
+
+doushite sugu miteshimau no
+doushite sugu itte shimau no
+doushite sugu koware chau ka na
+(papara para para)
+
+kin mirai shika katan
+shoppingu mouru no gendai konpyuu
+shou uindou shi ka katan
+monti houru no keihi de pinbooru
+
+oiru massaaji hyaku-bu kousu ashiyu-tsuki
+yuzu o soete
+
+te te te teto teto te te te tetorisu
+doushite konna me ni ni ni
+
+kyoumi ga nai koto honki janai mono zenbu atomawashi de
+shitteru koto wa shiranpuri watashi wa owatteru
+
+hazukashii kako shitteru yatsu-ra no kioku kesa sete
+meiwaku kakete gomen tteba nee darekatasukete
+
+moushin de sugu hika re chau no
+kyoushin de sugu hika re chau no
+shiritakunai shiritakunai shiritakunai
+(ta tara tara tara)
+
+mou minee sugu hika re SAD
+joukin de kurui-tate MAD
+ikitakunai ikitakunai ikitakunai
+baai bai
+
+rinji kyuugyou sentaku booru
+naichingeeru no haishin geemu
+meishi koukan no mei shiin
+shakkin booru de chinchiro haibooru
+
+onsen ryokou sanpaku yokka shokuji-tsuki
+hayaku ikitee
+
+te te te teto teto
+te te te tetorisu
+kyoukan-sei shuuchi chi chi
+
+utsu toka sou toka isogashiku te nemure nai wa kyou mo
+dare ka hayaku nagutte kizetsu sa sete kure yo
+
+jinsei kyanseru kyanseru kaiwai
+bon'yari to shita fuan
+watashi no sei watashi ga warui yo souda yo
+
+kyoumi ga dete mo honki de yatte mo zenbu karamawari de
+shiranai kuse ni usotsuki watashi wa owatteru
+
+hazukashii kako shitteru yatsu-ra no kioku kesa sete
+meiwaku kakete gomen tteba
+nee darekatasukete
+
+meiwaku kakete gomen tteba
+nee dare ka yurushite
+
+~AB
+ */

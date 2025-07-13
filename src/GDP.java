@@ -159,11 +159,60 @@ public class GDP {
     }
 
     /**
-     * Encontrar el 'na' entre p1 y p2
+        Se busca el camino minimo de amistad si es que existe entre 2 personas, priero verificando
+        que existan, luego se ve si es que hay bloqueo directo, sino se usa BFS para ver el camino
+        mas corto ignorando relaciones bloqueadas (serial "1") y que no sean amistades (serial no "0")
+        manteniendo registro de distancias y deteniendose si se llega al destino, devolviendo la distancia minima
+        o ∞ si no hay conexion o bloqueo
      */
     public void nivelDeAmistad(int p1, int p2) {
-        if (!(exists(p1) && exists(p2))) return;
+        // Verificar si existen
+        if (!exists(p1) || !exists(p2)) {
+            System.out.println("Una de las personas no existe.");
+            return;
+        }
+        // Verificar bloqueo directo
+        for (Arista a : grafo[p1]) {
+            if (a.id == p2 && a.serial.endsWith("1")) {
+                System.out.println("Nivel de amistad entre " + getNombre(p1) + " y " + getNombre(p2) + ": ∞ (bloqueo directo)");
+                return;
+            }
+        }
+        // BFS  pero se ignoran todas las aristas bloqueadas
+        boolean[] visitado = new boolean[personas.length];
+        int[] distancia = new int[personas.length];
+        Arrays.fill(distancia, Integer.MAX_VALUE);
 
+        LinkedList<Integer> queue = new LinkedList<>();
+        queue.add(p1);
+        visitado[p1] = true;
+        distancia[p1] = 0;
+
+        while (!queue.isEmpty()) {
+            int actual = queue.poll();
+            for (Arista a : grafo[actual]) {
+                // Ignorar aristas bloqueadas o que no sean de amistad
+                if (!a.serial.endsWith("0") || a.serial.endsWith("1")) {
+                    continue;
+                }
+                int vecino = a.id;
+                if (!visitado[vecino]) {
+                    visitado[vecino] = true;
+                    distancia[vecino] = distancia[actual] + 1;
+                    queue.add(vecino);
+                    // terminar si encontramos p2
+                    if (vecino == p2) {
+                        queue.clear();
+                        break;
+                    }
+                }
+            }
+        }
+        if (distancia[p2] == Integer.MAX_VALUE) {
+            System.out.println("Nivel de amistad entre " + getNombre(p1) + " y " + getNombre(p2) + ": ∞");
+        } else {
+            System.out.println("Nivel de amistad entre " + getNombre(p1) + " y " + getNombre(p2) + ": " + distancia[p2]);
+        }
     }
 
     public void visualizar() {

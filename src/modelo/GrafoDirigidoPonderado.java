@@ -67,7 +67,7 @@ public class GrafoDirigidoPonderado {
         int p1 = getId(ps1);
         int p2 = getId(ps2);
         if (p1 == -1 || p2 == -1) return;
-        fecha += "/0";
+        fecha += "-0";
 
         // Relacionar
         grafo[p1].add(new Arista(p2, fecha));
@@ -80,7 +80,6 @@ public class GrafoDirigidoPonderado {
     /**
      * Se debe enviar un correo a los vecinos de p1 diciendo que es posible que conozca a p2, y al revés
      */
-
     private void func_sendEmail(int p1, int p2, String fecha) {
         // Para cada vecino, imprimir el mensaje
         System.out.println("¡Ahora " + getNombre(p1) + " y " + getNombre(p2) + " son amigos! (" + fecha + ")");
@@ -122,7 +121,7 @@ public class GrafoDirigidoPonderado {
         int p2 = getId(ps2);
         if (p1 == -1 || p2 == -1) return;
 
-        fecha = fecha + "/1";
+        fecha = fecha + "-1";
 
         // Eliminar la amistad (si existe) en ambos sentidos
         grafo[p1].removeIf(a -> a.id == p2);
@@ -176,11 +175,63 @@ public class GrafoDirigidoPonderado {
      * Encontrar el 'na' entre p1 y p2
      */
 
-    public void func_friendshipLevel(int p1, int p2) {
-        if (!(exists(p1) && exists(p2))) return;
+    public String func_friendshipLevel(String ps1, String ps2) {
+        int p1 = getId(ps1);
+        int p2 = getId(ps2);
 
-        //todo IMPLEMENTAR METODO PENDIENTE!
+        if (ps1.equals(ps2)) return "No ingrese un nombre dos veces :O";
+        // Verificar si existen
+        if (!exists(p1) || !exists(p2)) {
+            return "Una de las personas no existe";
+        }
+        // Verificar bloqueo directo
+        for (Arista a : grafo[p1]) {
+            if (a.id == p2 && a.serial.endsWith("1")) {;
+                return "Nivel no disponible porque "+ps1+" bloqueó a "+ps2
+                        +" el "+serialToDateFormated(a.serial,0);
+            }
+        }
+        for (Arista a : grafo[p2]) {
+            if (a.id == p1 && a.serial.endsWith("1")) {
+                return "Nivel no disponible porque  "+ps2+" fué bloqueado por "+ps1
+                        +" el "+serialToDateFormated(a.serial,0);
+            }
+        }
+        // BFS  pero se ignoran todas las aristas bloqueadas
+        boolean[] visitado = new boolean[personas.length];
+        int[] distancia = new int[personas.length];
+        Arrays.fill(distancia, Integer.MAX_VALUE);
 
+        LinkedList<Integer> queue = new LinkedList<>();
+        queue.add(p1);
+        visitado[p1] = true;
+        distancia[p1] = 0;
+
+        while (!queue.isEmpty()) {
+            int actual = queue.poll();
+            for (Arista a : grafo[actual]) {
+                // Ignorar aristas bloqueadas o que no sean de amistad
+                if (!a.serial.endsWith("0") || a.serial.endsWith("1")) {
+                    continue;
+                }
+                int vecino = a.id;
+                if (!visitado[vecino]) {
+                    visitado[vecino] = true;
+                    distancia[vecino] = distancia[actual] + 1;
+                    queue.add(vecino);
+                    // terminar si encontramos p2
+                    if (vecino == p2) {
+                        queue.clear();
+                        break;
+                    }
+                }
+            }
+        }
+        if (distancia[p2] == Integer.MAX_VALUE) {
+            return "infinito";
+        } else {
+            return distancia[p2] + "";
+        }
     }
 
     public void debug_graphVisualizer() {
@@ -263,6 +314,19 @@ public class GrafoDirigidoPonderado {
             if (persona != null && persona.id == id) return persona.nombre;
         }
         return null;
+    }
+
+    private String serialToDateFormated(String serial, int mode){
+        int dia = Integer.parseInt(serial.substring(0, 2));
+        int mes = Integer.parseInt(serial.substring(2, 4));
+        int anio = Integer.parseInt(serial.substring(4, 8));
+
+        if (mode == 0){
+            // retornar la fecha con año
+            return dia + " de " + Mes.fromNumero(mes) + " del " + anio;
+        }
+        // sino, solo dia y mes
+        return dia + " de " + Mes.fromNumero(mes);
     }
 
     //  Métodos para testear -------------------------------------------------------------------------------------------

@@ -132,9 +132,17 @@ public class VistaLoader {
     }
 
     private void obtainFriendshipLevel() {
+        System.out.print("""                            
+                    ╔══════════════════════════════════════╗
+                    ║       OBTENER NIVEL DE AMISTAD       ║
+                    ╚══════════════════════════════════════╝
+                    """);
 
-        System.out.println("FUNCION NO IMPLEMENTADA, PERO AQUÍ ESTÁ EL ESQUELETO");
-        //todo ESTA PENDEJADA IGUAL FALTA, PONGALE WENO A LA PALA, Y DESPUES CUELGUENME DE UN ARBOL USANDO LA CORNETA
+        System.out.print("Ingrese el nombre de la primera persona: ");
+        String p1 = sc.next();
+        System.out.print("Ingrese el nombre de la segunda persona: ");
+        String p2 = sc.next();
+        System.out.println("-> "+g.func_friendshipLevel(p1,p2));
     }
 
     private void debugFunc() {

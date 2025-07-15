@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.IllegalFormatException;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class VistaLoader {
@@ -37,7 +38,8 @@ public class VistaLoader {
                     ║  4. Encontrar cumpleaños próximos    ║
                     ║  5. Nivel de amistad entre amigos    ║
                     ║  6. Ejecutar funciones debug         ║
-                    ║  7. Salir                            ║
+                    ║  7. Visualizar sistema               ║
+                    ║  8. Salir                            ║
                     ╚══════════════════════════════════════╝
                     """);
             System.out.print("Ingrese una opción: ");
@@ -57,12 +59,13 @@ public class VistaLoader {
                     case 4 -> findBirthdayInNextNDays();
                     case 5 -> obtainFriendshipLevel();
                     case 6 -> debugFunc();
-                    case 7 -> {
+                    case 7 -> visualizer();
+                    case 8 -> {
                         System.out.println("Saliendo del programa...");
                         return;
                     }
                     default ->
-                            System.out.println("[ERROR] Opcion seleccionada no válida, por favor intente nuevamente.");
+                            System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
                 }
             }
         } // Fin del bucle while
@@ -75,12 +78,12 @@ public class VistaLoader {
                     ║         CREAR NUEVA PERSONA          ║
                     ╚══════════════════════════════════════╝
                     """);
-            String nombre = aux_getInputString("Nombre de la persona? ");
-            int diaCumple = aux_getInputInteger("Día de cumpleaños? ");
-            int mesCumple = aux_getInputInteger("Mes de cumpleaños? ");
-            String profesion = aux_getInputString("Profesión? ");
-            String email = aux_getInputString("Email? ");
-
+            System.out.println("Registrar a una persona en el sistema");
+            String nombre = aux_getInputString("Nombre: ");
+            int diaCumple = aux_getInputInteger("Día de cumpleaños: ");
+            int mesCumple = aux_getInputInteger("Mes de cumpleaños: ");
+            String profesion = aux_getInputString("Profesión: ");
+            String email = aux_getEmail();
             g.func_createPersona(nombre, diaCumple, mesCumple, profesion, email);
 
         } catch (GrafoException e) {
@@ -95,8 +98,10 @@ public class VistaLoader {
                     ║       AGREGAR RELACIÓN DE AMISTAD     ║
                     ╚═══════════════════════════════════════╝
                     """);
-            String nombre1 = aux_getInputString("Nombre de la primera persona? ");
-            String nombre2 = aux_getInputString("Nombre de la segunda persona? ");
+            System.out.println("Dadas dos personas se establece una amistad entre ellas");
+            String nombre1 = g.getNombre(aux_getIdPersona());
+            String nombre2 = aux_getInputString("Nombre: ");
+            g.exists(nombre2);
             String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
 
             g.func_friendsPersona(nombre1, nombre2, fecha);
@@ -112,8 +117,11 @@ public class VistaLoader {
                     ║          BLOQUEAR AMIGO              ║
                     ╚══════════════════════════════════════╝
                     """);
-            String nombre1 = aux_getInputString("Nombre de la primera persona? ");
-            String nombre2 = aux_getInputString("Nombre de la segunda persona? ");
+            System.out.println("Dadas dos personas el primero bloquea al segundo");
+            String nombre1 = aux_getInputString("Nombre: ");
+            g.exists(nombre1);
+            String nombre2 = aux_getInputString("Nombre: ");
+            g.exists(nombre2);
             String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
 
             g.func_blockFriend(nombre1, nombre2, fecha);
@@ -129,8 +137,9 @@ public class VistaLoader {
                     ║      BUSCAR CUMPLEAÑOS PRÓXIMOS      ║
                     ╚══════════════════════════════════════╝
                     """);
+            System.out.println("Obtener los próximos cumpleaños dentro de k días");
             LocalDate fechaInicio = aux_getDate();
-            int n = aux_getInputInteger("Dentro de cuantos dias? ");
+            int n = aux_getInputInteger("Rango de días: ");
             g.func_birthdayDayFind(n, fechaInicio);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
@@ -144,12 +153,19 @@ public class VistaLoader {
                     ║       OBTENER NIVEL DE AMISTAD       ║
                     ╚══════════════════════════════════════╝
                     """);
-            String p1 = aux_getInputString("Ingrese el nombre de la primera persona? ");
-            String p2 = aux_getInputString("Ingrese el nombre de la segunda persona? ");
+            System.out.println("Dadas dos personas obtener su nivel de amistad");
+            String p1 = aux_getInputString("Nombre: ");
+            g.exists(p1);
+            String p2 = aux_getInputString("Nombre: ");
+            g.exists(p2);
             g.func_friendshipLevel(p1, p2);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void visualizer(){
+        g.debug_graphVisualizer();
     }
 
     // CLASES AUXILIARES, CREADAS PARA AGILIZAR EL CÓDIGO PRINCIPAL
@@ -162,6 +178,8 @@ public class VistaLoader {
                 ╚══════════════════════════════════════╝
                 """);
         g.func_createPersona("Lucas", 9, 8, "Bombero", "luks09@gmail.com");
+        g.func_createPersona("Lucas", 9, 8, "Bombero", "otroluks@gmail.com");
+
         g.func_createPersona("Ema", 1, 3, "Estudiante", "emmma3@gmail.com");
         g.func_createPersona("Carlos", 15, 12, "Doctor", "carlos.md@gmail.com");
         g.func_createPersona("Sofía", 27, 6, "Ingeniera", "sofia27@gmail.com");
@@ -188,54 +206,106 @@ public class VistaLoader {
 
         g.getListaAdyacencia();
         g.debug_graphVisualizer();
+        g.systemInfo();
     }
 
     private String aux_getInputString(String texto) {
-        System.out.print(texto);
+        System.out.print("> "+texto);
         return sc.next();
     }
 
+    private String aux_getEmail() {
+        String email;
+        int intentos = 0;
+
+        do {
+            email = aux_getInputString("Correo electrónico: ");
+            intentos++;
+
+            if (intentos > 2 || email.isEmpty()) {
+                email = generarCorreoRandom();
+                System.out.println("Lo ha intentado muchas veces. Se asignará "+email+" como correo");
+                break;
+            }
+
+        } while (!g.verificarEmail(email));  // Cambiado el signo
+        return email;
+    }
+
+
+    private String generarCorreoRandom() {
+        String caracteres = "abcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+
+        int longitud = 10 + random.nextInt(6); // Genera un correo entre 10 a 15 caracteres
+
+        for (int i = 0; i < longitud; i++) {
+            sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        }
+
+        return sb.toString() + "@gmail.com";
+    }
+
+
     private int aux_getInputInteger(String texto) throws GrafoException {
-        System.out.print(texto);
+        System.out.print("> "+texto);
 
         try {
             return Integer.parseInt(sc.next());
         } catch (NumberFormatException e) {
-            throw new GrafoException("[ERROR] Entrada inválida, por favor ingrese un número entero.");
+            throw new GrafoException("[ERROR] Entrada no válida; digite un número válido.");
         }
     }
 
     private LocalDate aux_getDate() throws GrafoException {
         while (true) {
-            String val = aux_getInputString("Desea usar la fecha actual como fecha de inicio [SI / NO]? ");
+            String val = aux_getInputString("Desea usar la fecha actual como fecha de inicio [s / n]? ");
 
             switch (val.toUpperCase()) {
-                case "SI" -> {
+                case "S" -> {
                     return LocalDate.now();
                 }
-                case "NO" -> {
+                case "N" -> {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                     try {
-                        int dia = aux_getInputInteger("Ingrese día? ");
-                        int mes = aux_getInputInteger("Ingrese mes? ");
-                        int anio = aux_getInputInteger("Ingrese año? ");
+                        int dia = aux_getInputInteger("> Día: ");
+                        int mes = aux_getInputInteger("> Mes: ");
+                        int anio = aux_getInputInteger("> Año: ");
                         String fechaStr = String.format("%02d/%02d/%04d", dia, mes, anio);
                         return LocalDate.parse(fechaStr, formatter);
 
                     } catch (GrafoException e) {
                         throw new GrafoException(e.getMessage());
                     } catch (IllegalFormatException e) {
-                        throw new GrafoException("[ERROR] Formato de fecha inválido. Por favor, use el formato DD/MM/YYYY.");
+                        throw new GrafoException("[ERROR] Formato de fecha no válido. Por favor, use el formato DD/MM/YYYY.");
                     } catch (InputMismatchException e) {
-                        throw new GrafoException("[ERROR] Entrada inválida. Por favor, ingrese números enteros para día, mes y año.");
+                        throw new GrafoException("[ERROR] Entrada no válida. Por favor, ingrese números enteros para día, mes y año.");
                     } catch (DateTimeParseException e) {
-                        throw new GrafoException("[ERROR] Error serio al retornar fecha. Avisar al desarrollador.");
+                        throw new GrafoException("[ERROR] Error serio al retornar fecha. Contactar con desarrollador.");
                     }
                 }
-                default -> System.out.println("[ERROR] Valor invalido ingresado. Por favor, ingrese 'SI' o 'NO'.");
+                default -> System.out.println("[ERROR] Valor no válido ingresado. Por favor, ingrese 's' o 'n'.");
             }
         }
+    }
+
+    private int aux_getIdPersona(){
+        // Funcion pa pedir el nombre
+        // Obtener el nombre en una variable
+        // Preguntar si existe más de una persona con el mismo nombre en el sistema
+        // Si no es asi, retornar el nombre
+        // Si hay mas de una persona con ese nombre, enlistarlas y pedir elección de cual quiere
+
+        String nombre = aux_getInputString("Nombre: ");
+        String lista = g.getListaInstancias(nombre);
+        if (!lista.isBlank()){
+            // Pedir la instancia correcta
+            System.out.println(lista);
+            nombre = g.getNombre(aux_getInputInteger("Id: "));
+        }
+        return g.getId(nombre);
     }
 }
 

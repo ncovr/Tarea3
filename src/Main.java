@@ -8,10 +8,11 @@ public class Main {
     }
 
     private static void debugGeneralInformation() {
-        System.out.print("""
-                COMPILACIÓN 3, 12 DE JUNIO DE 2025
-                HORA: 16:54
-                PROGRAMA EN ESTADO SEMI-FUNCIONAL! REVISAR LISTA DE PENDIENTES (todo)
-                """);
+        System.out.println("Pre-alpha version");
+//        System.out.print("""
+//                COMPILACIÓN 3, 12 DE JUNIO DE 2025
+//                HORA: 16:54
+//                PROGRAMA EN ESTADO SEMI-FUNCIONAL! REVISAR LISTA DE PENDIENTES (todo)
+//                """);
     }
 }

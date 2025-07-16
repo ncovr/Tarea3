@@ -99,12 +99,11 @@ public class VistaLoader {
                     ╚═══════════════════════════════════════╝
                     """);
             System.out.println("Dadas dos personas se establece una amistad entre ellas");
-            String nombre1 = g.getNombre(aux_getIdPersona());
-            String nombre2 = aux_getInputString("Nombre: ");
-            g.exists(nombre2);
+            // todo trabajando en esto
+            int id1 = aux_getIdPersona();
+            int id2 = aux_getIdPersona();
             String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
-
-            g.func_friendsPersona(nombre1, nombre2, fecha);
+            g.func_friendsPersona(id1, id2, fecha);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
         }
@@ -219,6 +218,7 @@ public class VistaLoader {
         int intentos = 0;
 
         do {
+            if(intentos > 0) System.out.println("El correo ingresado ya está en el sistema. Ingrese uno distinto");
             email = aux_getInputString("Correo electrónico: ");
             intentos++;
 
@@ -228,7 +228,7 @@ public class VistaLoader {
                 break;
             }
 
-        } while (!g.verificarEmail(email));  // Cambiado el signo
+        } while (!g.verificarEmail(email));
         return email;
     }
 
@@ -292,20 +292,20 @@ public class VistaLoader {
     }
 
     private int aux_getIdPersona(){
-        // Funcion pa pedir el nombre
-        // Obtener el nombre en una variable
-        // Preguntar si existe más de una persona con el mismo nombre en el sistema
-        // Si no es asi, retornar el nombre
-        // Si hay mas de una persona con ese nombre, enlistarlas y pedir elección de cual quiere
+        // Pedir el nombre de la persona para retornar el id
+        // Buscar si: existe/no existe en el sistema, y si existe más de una persona con ese nombre preguntar cuál elige
 
+
+        // todo mejorar el mensaje que solicita ambos nombres
         String nombre = aux_getInputString("Nombre: ");
+        int id = 0;
         String lista = g.getListaInstancias(nombre);
         if (!lista.isBlank()){
             // Pedir la instancia correcta
             System.out.println(lista);
-            nombre = g.getNombre(aux_getInputInteger("Id: "));
+            id = aux_getInputInteger("Id: ");
         }
-        return g.getId(nombre);
+        return id;
     }
 }
 

@@ -27,28 +27,28 @@ public class Persona {
         return nombre;
     }
 
-    public String get(){
+    public String get() {
         String sid = "";
-        if (id < 10) sid = "00"+id;
-        if (id < 100) sid = "0"+id;
-        return "("+sid+") "+nombre+" "+email;
+        if (id < 10) sid = "00" + id;
+        if (id < 100) sid = "0" + id;
+        return "(" + sid + ") " + nombre + " " + email;
     }
 
-    public String getNombreYid(){
-        return nombre+" ("+id+")";
+    public String getNombreYid() {
+        return nombre + " (" + id + ")";
     }
 
     public String getFechaCumple() {
         return dia + "/" + mes;
     }
 
-    public String getSerial(){
+    public String getSerial() {
         String serial = "";
-        if (this.dia < 10) serial += "0"+dia;
-        else serial += ""+dia;
-        if (this.mes < 10) serial += "0"+mes;
-        else serial += ""+mes;
-        return serial+="0000";
+        if (this.dia < 10) serial += "0" + dia;
+        else serial += "" + dia;
+        if (this.mes < 10) serial += "0" + mes;
+        else serial += "" + mes;
+        return serial += "0000";
     }
 
     public String getCuentaRegresiva() {
@@ -77,7 +77,7 @@ public class Persona {
         return response;
     }
 
-    public String getCorreosElectronicos(){
+    public String getCorreosElectronicos() {
         return email;
     }
 }

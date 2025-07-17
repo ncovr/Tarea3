@@ -12,7 +12,7 @@ package modelo;
  * - Cada elemento de la lista se estructura así: (id) Nombre CorreoElectronico
  * - El usuario deberá digitar el Id que eliga
  * - El sistema considera al escogido para realizar la consulta
- *
+ * <p>
  * El error a resolver es que la funcion que enlaza a las personas recibe el nombre de estas, y al obtener el nombre
  * pesca a la primera persona que pilla con ese nombre en la lista, por ende, no importa qué id elijamos; siempre ele
  * gira a la primera persona que encuentre. Pensaba en cambiar los parametros de la funcion amistar pero eso complica
@@ -22,12 +22,13 @@ package modelo;
  * pueda escoger a la persona a partir de su id, no de su nombre. el problema de esto es que por cada operación se
  * imprimirá una lista extensa de personas, a menos que el usuario se guíe de la ventana que representa visualmente
  * el grafo (no seria mala idea). Conversar con el equipo; atte. ncovr
- * */
+ */
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import exceptions.GrafoException;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -87,11 +88,11 @@ public class GrafoDirigidoPonderado {
      * ser dos personas totalmente distintas
      */
 
-    public void func_friendsPersona(String ps1, String ps2, String fecha) throws  GrafoException {
+    public void func_friendsPersona(String ps1, String ps2, String fecha) throws GrafoException {
         int p1 = getId(ps1);
-        if (p1 == -1) throw new GrafoException("No existe \""+ps1+"\" en el sistema");
+        if (p1 == -1) throw new GrafoException("No existe \"" + ps1 + "\" en el sistema");
         int p2 = getId(ps2);
-        if (p2 == -1) throw new GrafoException("No existe \""+ps2+"\" en el sistema");
+        if (p2 == -1) throw new GrafoException("No existe \"" + ps2 + "\" en el sistema");
         fecha += "-0";
 
         // Relacionar
@@ -105,10 +106,10 @@ public class GrafoDirigidoPonderado {
 
     /**Para evitar codigo que revise si existen las personas (id), debemos asesorarnos de que la función de por sí reciba
      * valores registrados. Esto se hace averiguando si existe la persona justo despues de ingresar el nombre en la op.*/
-    public void func_friendsPersona(int id1, int id2, String date) throws  GrafoException {
+    public void func_friendsPersona(int id1, int id2, String date) throws GrafoException {
         date += "-0";
-        grafo[id1].add(new Arista(id2,date));
-        grafo[id2].add(new Arista(id1,date));
+        grafo[id1].add(new Arista(id2, date));
+        grafo[id2].add(new Arista(id1, date));
         sucessMessage();
         func_sendEmail(id1, id2, date);
     }
@@ -125,8 +126,8 @@ public class GrafoDirigidoPonderado {
         System.out.println("..:: ¡Ahora " + getNombre(p1) + " y " + getNombre(p2) + " son amigos! (" + fecha + ") ::..");
 
         Persona pp = personas[p1];
-        if (pp != null && grafo[p1].size() > 1){
-            System.out.println("("+grafo[p1].size()+")"+" correos para los amigos de " + personas[p1].nombre);
+        if (pp != null && grafo[p1].size() > 1) {
+            System.out.println("(" + grafo[p1].size() + ")" + " correos para los amigos de " + personas[p1].nombre);
             for (Arista a : grafo[p1]) {
                 if (a.id == p2) continue;
                 Persona p = personas[a.id];
@@ -138,8 +139,8 @@ public class GrafoDirigidoPonderado {
         }
 
         pp = personas[p2];
-        if (pp != null && grafo[p2].size() > 1){
-            System.out.println("("+grafo[p1].size()+")"+" correo para los amigos de " + personas[p2].nombre);
+        if (pp != null && grafo[p2].size() > 1) {
+            System.out.println("(" + grafo[p1].size() + ")" + " correo para los amigos de " + personas[p2].nombre);
             for (Arista a : grafo[p2]) {
                 if (a.id == p1) continue;
                 Persona p = personas[a.id];
@@ -175,7 +176,7 @@ public class GrafoDirigidoPonderado {
         // Establecer el bloqueo desde p1 hacia p2
         grafo[p1].add(new Arista(p2, fecha));
 
-        System.out.println("..:: ¡"+ps1+" ha bloqueado a "+ps2+"! Han dejado de ser amigos ::..");
+        System.out.println("..:: ¡" + ps1 + " ha bloqueado a " + ps2 + "! Han dejado de ser amigos ::..");
         sucessMessage();
     }
 
@@ -190,15 +191,15 @@ public class GrafoDirigidoPonderado {
 
         // Establecemos que p1 bloquea a p2
         grafo[id1].add(new Arista(id2, fecha));
-        System.out.println("¡"+getNombre(id1)+" ha bloqueado a "+getNombre(id2)+" con éxito!");
+        System.out.println("¡" + getNombre(id1) + " ha bloqueado a " + getNombre(id2) + " con éxito!");
     }
 
     /**
      * Encontrar las personas que estarán de cumpleaños dentro de los próximos k días. Enviar correo a sus amigos directos
      */
 
-    public void func_birthdayDayFind(int k, LocalDate day) throws GrafoException{
-        if (k <= 0 || day == null) throw new  GrafoException("Ingrese datos válidos");
+    public void func_birthdayDayFind(int k, LocalDate day) throws GrafoException {
+        if (k <= 0 || day == null) throw new GrafoException("Ingrese datos válidos");
         if (personas.length == 0) throw new GrafoException("No existen registros de personas en el sistema");
 
         LocalDate endDate = day.plusDays(k);
@@ -214,7 +215,7 @@ public class GrafoDirigidoPonderado {
             }
 
             if (!birthday.isAfter(endDate)) {
-                System.out.println(".: "+persona.nombre + ", el " + serialToDateFormated(persona.getSerial(), 1)+" :.");
+                System.out.println(".: " + persona.nombre + ", el " + serialToDateFormated(persona.getSerial(), 1) + " :.");
                 // Enviar correos a amigos directos
 
                 if (grafo[persona.id] == null || grafo[persona.id].isEmpty()) {
@@ -228,7 +229,7 @@ public class GrafoDirigidoPonderado {
                 }
             }
         }
-        System.out.println("Cumpleaños próximos en total: "+c);
+        System.out.println("Cumpleaños próximos en total: " + c);
         sucessMessage();
     }
 
@@ -245,15 +246,16 @@ public class GrafoDirigidoPonderado {
 
         // Verificar bloqueo directo
         for (Arista a : grafo[p1]) {
-            if (a.id == p2 && a.serial.endsWith("1")) {;
-                return "Nivel no disponible porque "+ps1+" bloqueó a "+ps2
-                        +" el "+serialToDateFormated(a.serial,0);
+            if (a.id == p2 && a.serial.endsWith("1")) {
+                ;
+                return "Nivel no disponible porque " + ps1 + " bloqueó a " + ps2
+                        + " el " + serialToDateFormated(a.serial, 0);
             }
         }
         for (Arista a : grafo[p2]) {
             if (a.id == p1 && a.serial.endsWith("1")) {
-                return "Nivel no disponible porque  "+ps2+" fué bloqueado por "+ps1
-                        +" el "+serialToDateFormated(a.serial,0);
+                return "Nivel no disponible porque  " + ps2 + " fué bloqueado por " + ps1
+                        + " el " + serialToDateFormated(a.serial, 0);
             }
         }
 
@@ -360,27 +362,28 @@ public class GrafoDirigidoPonderado {
 
     // ----------------------- FUNCIONES AUXILIARES PARA AYUDAR CON LA EJECUCIÓN DE LOS MÉTODOS ------------------------
 
-    public void exists(int p) throws GrafoException{ // Verifica si la persona (id) existe en el sistema
-        if (p <= 0 || p >= personas.length) throw new GrafoException("No hay registro de \""+getNombre(p)+"\"  en el sistema");
+    public void exists(int p) throws GrafoException { // Verifica si la persona (id) existe en el sistema
+        if (p <= 0 || p >= personas.length)
+            throw new GrafoException("No hay registro de \"" + getNombre(p) + "\"  en el sistema");
         boolean b = false;
         for (int i = 1; i < personas.length; i++) {
             if (personas[i] != null && personas[i].id == p) b = true;
         }
-        if (!b) throw new GrafoException("No hay registro de \""+getNombre(p)+"\"  en el sistema");
+        if (!b) throw new GrafoException("No hay registro de \"" + getNombre(p) + "\"  en el sistema");
     }
 
-    private void sucessMessage(){
+    private void sucessMessage() {
         System.out.println("Suceso terminado con éxito");
     }
 
-    public void exists(String ps) throws GrafoException{ // Verifica si la persona (nombre) existe en el sistema
+    public void exists(String ps) throws GrafoException { // Verifica si la persona (nombre) existe en el sistema
         int p = getId(ps);
-        if (p <= 0 || p >= personas.length) throw new GrafoException("No hay registro de \""+ps+"\" en el sistema");
+        if (p <= 0 || p >= personas.length) throw new GrafoException("No hay registro de \"" + ps + "\" en el sistema");
         boolean b = false;
         for (int i = 1; i < personas.length; i++) {
             if (personas[i] != null && personas[i].id == p) b = true;
         }
-        if (!b) throw new GrafoException("\""+ps+"\" no encontrad@ en el sistema");
+        if (!b) throw new GrafoException("\"" + ps + "\" no encontrad@ en el sistema");
     }
 
     public int getId(String p) { // Dado un nombre: buscar el índice en la que se encuentra la persona en 'personas'
@@ -391,10 +394,10 @@ public class GrafoDirigidoPonderado {
     }
 
     public String getNombre(int id) { // Dado un id: retornar el nombre de la persona
-        return personas[id]+"";
+        return personas[id] + "";
     }
 
-    public String getEmail(int id){
+    public String getEmail(int id) {
         for (Persona p : personas) {
             if (p.id == id) return p.email;
         }
@@ -434,16 +437,16 @@ public class GrafoDirigidoPonderado {
         return e;
     }
 
-    public String getListaInstancias(String nombre){ // Dado un nombre: retorna una lista de personasque comparten el nombre
+    public String getListaInstancias(String nombre) { // Dado un nombre: retorna una lista de personasque comparten el nombre
         exists(nombre);
 
         // Si hay más de una persona en el sistema, se retorna una lista con todas esas coincidencias
-        StringBuilder s = new  StringBuilder();
-        s.append("Se ha encontrado a más de un(a) \""+nombre+"\" en el sistema. Seleccione el Id de la persona que desea elegir para la operación");
+        StringBuilder s = new StringBuilder();
+        s.append("Se ha encontrado a más de un(a) \"" + nombre + "\" en el sistema. Seleccione el Id de la persona que desea elegir para la operación");
         // todo agregar una linea que encabece la lista: id - nombre - email
         for (Persona persona : personas) {
             if (persona != null && persona.nombre.equals(nombre)) {
-                s.append("\n"+persona.get());
+                s.append("\n" + persona.get());
             }
         }
         String[] ps = s.toString().split("\n");
@@ -473,12 +476,12 @@ public class GrafoDirigidoPonderado {
         }
     }
 
-    public void systemInfo(){
-        System.out.println("Cantidad de personas: "+(personas.length-1));
+    public void systemInfo() {
+        System.out.println("Cantidad de personas: " + (personas.length - 1));
 
         int c = 0;
         System.out.print("Cantidad de relaciones: ");
-        for ( LinkedList<Arista> a : grafo) {
+        for (LinkedList<Arista> a : grafo) {
             c = c + a.size();
         }
         System.out.println(c);

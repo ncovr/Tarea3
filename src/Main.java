@@ -7,7 +7,6 @@ public class Main {
         vistaLoader.printMenu();
     }
 
-
     private static void debugGeneralInformation() {
         System.out.println("Pre-alpha version");
 //        System.out.print("""

@@ -21,6 +21,7 @@ import java.util.Scanner;
 // todo si el sistema no tiene datos, no deberia mostrar la opcion de agregar una relacion de amistad y otras mas porque no hay datos
 // todo controlar que el usuario no ingrese datos en blanco
 // todo escribir secuencialmente en la consola
+
 public class VistaLoader {
 
     public Scanner sc = new Scanner(System.in);

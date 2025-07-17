@@ -31,7 +31,7 @@ public class Persona {
         String sid = "";
         if (id < 10) sid = "00" + id;
         if (id < 100) sid = "0" + id;
-        return "(" + sid + ") " + nombre + " " + email;
+        return "(" + sid + ")\t" + nombre + "\t" + email;
     }
 
     public String getNombreYid() {

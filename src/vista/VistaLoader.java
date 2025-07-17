@@ -251,7 +251,6 @@ public class VistaLoader {
 
         g.getListaAdyacencia();
         g.debug_graphVisualizer();
-        g.systemInfo();
     }
 
     private String aux_getInputString(String texto) {

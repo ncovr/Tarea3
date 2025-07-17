@@ -277,7 +277,7 @@ public class GrafoDirigidoPonderado {
 
     public void debug_graphVisualizer() throws GrafoException {
         if (personas[1] == null) {
-            System.out.println("No hay datos para visualizar el grafo.");
+            System.out.println("No hay datos para visualizar el grafo...");
             return;
         }
         Graph g = new SingleGraph("Grafo de Personas");
@@ -334,8 +334,7 @@ public class GrafoDirigidoPonderado {
         }
 
         System.setProperty("org.graphstream.ui", "swing");
-        g.display();
-        sucessMessage();
+        g.display().setCloseFramePolicy(org.graphstream.ui.view.Viewer.CloseFramePolicy.HIDE_ONLY);
     }
 
     // ----------------------- FUNCIONES AUXILIARES PARA AYUDAR CON LA EJECUCIÓN DE LOS MÉTODOS ------------------------
@@ -377,7 +376,7 @@ public class GrafoDirigidoPonderado {
 
     public String getEmail(int id) {
         for (Persona p : personas) {
-            if (p.id == id) return p.email;
+            if (p != null && p.id == id) return p.email;
         }
         return "sin email";
     }
@@ -420,15 +419,15 @@ public class GrafoDirigidoPonderado {
 
         // Si hay más de una persona en el sistema, se retorna una lista con todas esas coincidencias
         StringBuilder s = new StringBuilder();
-        s.append("Se ha encontrado a más de un(a) \"" + nombre + "\" en el sistema. Seleccione el Id de la persona que desea elegir para la operación");
-        // todo agregar una linea que encabece la lista: id - nombre - email
+        s.append("Se ha encontrado a más de un(a) \"" + nombre + "\" en el sistema. Seleccione el Id de la persona que desea elegir para la operación\n");
+        s.append("id\t\tnombre\temail");
         for (Persona persona : personas) {
             if (persona != null && persona.nombre.equals(nombre)) {
                 s.append("\n" + persona.get());
             }
         }
         String[] ps = s.toString().split("\n");
-        if (ps.length > 2) return s.toString();
+        if (ps.length > 3) return s.toString();
         return " ";
     }
 
@@ -449,16 +448,5 @@ public class GrafoDirigidoPonderado {
             }
             System.out.println();
         }
-    }
-
-    public void systemInfo() {
-        System.out.println("Cantidad de personas: " + (personas.length - 1));
-
-        int c = 0;
-        System.out.print("Cantidad de relaciones: ");
-        for (LinkedList<Arista> a : grafo) {
-            c = c + a.size();
-        }
-        System.out.println(c);
     }
 }

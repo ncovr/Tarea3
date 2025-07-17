@@ -294,6 +294,7 @@ public class GrafoDirigidoPonderado {
         }
     }
 
+
     public void debug_graphVisualizer() throws GrafoException {
         if (personas[1] == null) {
             System.out.println("No hay datos para visualizar el grafo.");

@@ -197,6 +197,7 @@ public class VistaLoader {
         }
     }
 
+
     private void blockFriendship() {
         try {
             System.out.print("""                            

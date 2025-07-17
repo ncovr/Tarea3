@@ -30,4 +30,5 @@ public class Arista {
     public String toString() {
         return "(" + id + ";" + serial + ")";
     }
+
 }

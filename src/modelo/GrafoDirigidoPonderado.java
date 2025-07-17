@@ -1,7 +1,5 @@
 package modelo;
 
-// todo Implementar excepciones para manejar errores y mejorar la robustez del código!
-
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;

@@ -17,9 +17,6 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-// todo mientras se esté en la operacion solicitando datos, si el usuario presiona una tecla determinada, se corta el proceso
-// todo si el sistema no tiene datos, no deberia mostrar la opcion de agregar una relacion de amistad y otras mas porque no hay datos. arreglado
-
 public class VistaLoader {
 
     public Scanner sc = new Scanner(System.in);
@@ -115,12 +112,20 @@ public class VistaLoader {
                     ║         CREAR NUEVA PERSONA          ║
                     ╚══════════════════════════════════════╝
                     """);
-            System.out.println("Registrar a una persona en el sistema");
+            System.out.println("Registrar a una persona en el sistema. Ingrese '-1' si desea cancelar la operación");
             String nombre = aux_getInputString("Nombre: ");
+            if (nombre.equals("-1")) { // todo pulir el codigo para no tener ifs tan feos
+                System.out.println("Operación cancelada. Volviendo al menú principal...");
+                return;
+            }
             int diaCumple = aux_getInputInteger("Día de cumpleaños: ");
+            if (diaCumple == -1) return;
             int mesCumple = aux_getInputInteger("Mes de cumpleaños: ");
+            if (mesCumple == -1) return;
             String profesion = aux_getInputString("Profesión: ");
+            if (profesion.equals("-1")) return;
             String email = aux_getEmail();
+            if (email.equals("-1")) return;
             g.func_createPersona(nombre, diaCumple, mesCumple, profesion, email);
 
         } catch (GrafoException e) {
@@ -135,10 +140,13 @@ public class VistaLoader {
                     ║       AGREGAR RELACIÓN DE AMISTAD     ║
                     ╚═══════════════════════════════════════╝
                     """);
-            System.out.println("Dadas dos personas se establece una amistad entre ellas");
+            System.out.println("Dadas dos personas se establece una amistad entre ellas. Ingrese '-1' si desea cancelar la operación");
             int id1 = aux_getIdPersona();
+            if (id1 == -1) return;
             int id2 = aux_getIdPersona();
+            if (id2 == -1) return;
             String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+            if (fecha.equals("-1")) return;
             g.func_friendsPersona(id1, id2, fecha);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
@@ -153,10 +161,13 @@ public class VistaLoader {
                     ║          BLOQUEAR AMIGO              ║
                     ╚══════════════════════════════════════╝
                     """);
-            System.out.println("Dadas dos personas el primero bloquea al segundo");
+            System.out.println("Dadas dos personas el primero bloquea al segundo. Ingrese '-1' si desea cancelar la operación");
             int id1 = aux_getIdPersona();
+            if (id1 == -1) return;
             int id2 = aux_getIdPersona();
+            if (id2 == -1) return;
             String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+            if (fecha.equals("-1")) return;
             g.func_blockFriend(id1, id2, fecha);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
@@ -170,9 +181,10 @@ public class VistaLoader {
                     ║      BUSCAR CUMPLEAÑOS PRÓXIMOS      ║
                     ╚══════════════════════════════════════╝
                     """);
-            System.out.println("Obtener los próximos cumpleaños dentro de k días");
+            System.out.println("Obtener los próximos cumpleaños dentro de k días. Ingrese '-1' si desea cancelar la operación");
             LocalDate fechaInicio = aux_getDate();
             int n = aux_getInputInteger("Rango de días: ");
+            if (n == -1) return;
             g.func_birthdayDayFind(n, fechaInicio);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
@@ -186,9 +198,11 @@ public class VistaLoader {
                     ║       OBTENER NIVEL DE AMISTAD       ║
                     ╚══════════════════════════════════════╝
                     """);
-            System.out.println("Dadas dos personas obtener su nivel de amistad");
+            System.out.println("Dadas dos personas obtener su nivel de amistad. Ingrese '-1' si desea cancelar la operación");
             int id1 = aux_getIdPersona();
+            if (id1 == -1) return;
             int id2 = aux_getIdPersona();
+            if (id2 == -1) return;
             g.func_friendshipLevel(id1, id2);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());

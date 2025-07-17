@@ -2,28 +2,6 @@ package modelo;
 
 // todo Implementar excepciones para manejar errores y mejorar la robustez del código!
 
-
-/**
- * todo que pasa si queremos amistar a Valentina con Josefa dado el caso de que existen 2 valentinas con correo
- * diferente en el sistema? debemos preguntar al usuario cuál valentida quiere amistar. Entonces, al momento de ingresar
- * un nombre el sistema lo pesca, busca si hay más de una persona registrada con ese nombre y luego debe hacer lo siguiente:
- * - Le avisa al user que existe más de una persona con ese nombre
- * - Enlistará a todas las personas con ese nombre, acompañado de sus correos electrónicos
- * - Cada elemento de la lista se estructura así: (id) Nombre CorreoElectronico
- * - El usuario deberá digitar el Id que eliga
- * - El sistema considera al escogido para realizar la consulta
- * <p>
- * El error a resolver es que la funcion que enlaza a las personas recibe el nombre de estas, y al obtener el nombre
- * pesca a la primera persona que pilla con ese nombre en la lista, por ende, no importa qué id elijamos; siempre ele
- * gira a la primera persona que encuentre. Pensaba en cambiar los parametros de la funcion amistar pero eso complica
- * al usuario porque deeria dar el id en vez del nombre, y eso evitaria el problema de tener que buscar instancias, pero
- * el tema es que el usuario no conoce los id de cada persona en el sistema porque eso va asignandose secuencialmente.
- * Es por ello que se me ocurrió enlistar a todas las personas del minifacebook a modo de índice para que el usuario
- * pueda escoger a la persona a partir de su id, no de su nombre. el problema de esto es que por cada operación se
- * imprimirá una lista extensa de personas, a menos que el usuario se guíe de la ventana que representa visualmente
- * el grafo (no seria mala idea). Conversar con el equipo; atte. ncovr
- */
-
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -76,7 +54,7 @@ public class GrafoDirigidoPonderado {
         }
         personas[idCounter] = p;
         idCounter++;
-        sucessMessage();
+        System.out.println(".: "+nombre+ " creado exitosamente");
     }
 
     /**
@@ -98,7 +76,6 @@ public class GrafoDirigidoPonderado {
         // Relacionar
         grafo[p1].add(new Arista(p2, fecha));
         grafo[p2].add(new Arista(p1, fecha));
-        sucessMessage();
 
         // Enviar correos
         func_sendEmail(p1, p2, fecha);
@@ -118,16 +95,16 @@ public class GrafoDirigidoPonderado {
      * Se debe enviar un correo a los vecinos de p1 diciendo que es posible que conozca a p2, y al revés
      */
     private void func_sendEmail(int p1, int p2, String fecha) {
-        // Para cada vecino, imprimir el mensaje
-        // Si no hay amigos en común no se imprime ningún correo; tampoco se avisa que no hay correos por enviar
-        // Se hizo anteriormente así pero mancha la salida de texto
         String[] fechaf = fecha.split("-");
         fecha = serialToDateFormated(fechaf[0], 2);
-        System.out.println("..:: ¡Ahora " + getNombre(p1) + " y " + getNombre(p2) + " son amigos! (" + fecha + ") ::..");
+        System.out.println(".: Ahora " + getNombre(p1) + " y " + getNombre(p2) + " son amigos (" + fecha + ")");
 
         Persona pp = personas[p1];
-        if (pp != null && grafo[p1].size() > 1) {
-            System.out.println("(" + grafo[p1].size() + ")" + " correos para los amigos de " + personas[p1].nombre);
+        int correosP1 = (pp != null) ? grafo[p1].size() - 1 : 0; // excluye p2
+        if (pp != null && correosP1 > 0) {
+            String msgCorreos = correosP1 == 1 ? "correo" : "correos";
+            String msgAmigos = correosP1 == 1 ? "el amigo" : "amigos";
+            System.out.println("(" + correosP1 + ") " + msgCorreos + " para " + msgAmigos + " de " + pp.nombre);
             for (Arista a : grafo[p1]) {
                 if (a.id == p2) continue;
                 Persona p = personas[a.id];
@@ -139,8 +116,11 @@ public class GrafoDirigidoPonderado {
         }
 
         pp = personas[p2];
-        if (pp != null && grafo[p2].size() > 1) {
-            System.out.println("(" + grafo[p1].size() + ")" + " correo para los amigos de " + personas[p2].nombre);
+        int correosP2 = (pp != null) ? grafo[p2].size() - 1 : 0; // excluye p1
+        if (pp != null && correosP2 > 0) {
+            String msgCorreos = correosP2 == 1 ? "correo" : "correos";
+            String msgAmigos = correosP2 == 1 ? "el amigo" : "los amigos";
+            System.out.println("(" + correosP2 + ") " + msgCorreos + " para " + msgAmigos + " de " + pp.nombre);
             for (Arista a : grafo[p2]) {
                 if (a.id == p1) continue;
                 Persona p = personas[a.id];
@@ -152,6 +132,7 @@ public class GrafoDirigidoPonderado {
         }
         System.out.println();
     }
+
 
     /**
      * Establecer que p1 y p2 están bloqueados mutuamente (p1 bloqueó a p2 y p2 bloqueó a p1). Mi duda es, si es que
@@ -176,8 +157,7 @@ public class GrafoDirigidoPonderado {
         // Establecer el bloqueo desde p1 hacia p2
         grafo[p1].add(new Arista(p2, fecha));
 
-        System.out.println("..:: ¡" + ps1 + " ha bloqueado a " + ps2 + "! Han dejado de ser amigos ::..");
-        sucessMessage();
+        System.out.println(".: " + ps1 + " ha bloqueado a " + ps2 + " exitosamente");
     }
 
     public void func_blockFriend(int id1, int id2, String fecha) {
@@ -453,9 +433,6 @@ public class GrafoDirigidoPonderado {
         if (ps.length > 2) return s.toString();
         return " ";
     }
-
-    // todo informar por pantala que la operación se ha concretado exitosamente
-
 
     //  Métodos para testear -------------------------------------------------------------------------------------------
     public void getPersonas() {

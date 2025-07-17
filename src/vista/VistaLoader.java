@@ -18,64 +18,13 @@ import java.util.Random;
 import java.util.Scanner;
 
 // todo mientras se esté en la operacion solicitando datos, si el usuario presiona una tecla determinada, se corta el proceso
-// todo si el sistema no tiene datos, no deberia mostrar la opcion de agregar una relacion de amistad y otras mas porque no hay datos
-// todo controlar que el usuario no ingrese datos en blanco
-// todo escribir secuencialmente en la consola
+// todo si el sistema no tiene datos, no deberia mostrar la opcion de agregar una relacion de amistad y otras mas porque no hay datos. arreglado
 
 public class VistaLoader {
 
     public Scanner sc = new Scanner(System.in);
     public GrafoDirigidoPonderado g = new GrafoDirigidoPonderado();
     boolean arranque = true;
-
-    public void menu() {
-        while (true) {
-            int opcion = -1;
-
-            System.out.print("""
-                    ╔══════════════════════════════════════╗
-                    ║         GESTIÓN DE AMISTADES         ║
-                    ╠══════════════════════════════════════╣
-                    ║      .:::: MENU PRINCIPAL ::::.      ║
-                    ╠══════════════════════════════════════╣
-                    ║  1. Insertar persona                 ║
-                    ║  2. Agregar una relación de amistad  ║
-                    ║  3. Bloquear a un amigo              ║
-                    ║  4. Encontrar cumpleaños próximos    ║
-                    ║  5. Nivel de amistad entre amigos    ║
-                    ║  6. Ejecutar funciones debug         ║
-                    ║  7. Visualizar sistema               ║
-                    ║  8. Salir                            ║
-                    ╚══════════════════════════════════════╝
-                    """);
-            System.out.print("Ingrese una opción: ");
-
-            try {
-                opcion = sc.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("[ERROR] Por favor, ingrese un número válido.");
-                sc.next();
-            }
-
-            if (opcion != -1) {
-                switch (opcion) {
-                    case 1 -> createPersona();
-                    case 2 -> linkFriendship();
-                    case 3 -> blockFriendship();
-                    case 4 -> findBirthdayInNextNDays();
-                    case 5 -> obtainFriendshipLevel();
-                    case 6 -> debugFunc();
-                    case 7 -> visualizer();
-                    case 8 -> {
-                        System.out.println("Saliendo del programa...");
-                        return;
-                    }
-                    default ->
-                            System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
-                }
-            }
-        } // Fin del bucle while
-    }
 
     public void printMenu(){
         while (true) {
@@ -93,10 +42,9 @@ public class VistaLoader {
                     ║  3. Salir                            ║
                     ╚══════════════════════════════════════╝
                     """);
-                System.out.print("Ingrese una opción: ");
 
                 try {
-                    opcion = sc.nextInt();
+                    opcion = aux_getInputInteger("");
                 } catch (InputMismatchException e) {
                     System.out.println("[ERROR] Por favor, ingrese un número válido.");
                     sc.next();
@@ -132,10 +80,9 @@ public class VistaLoader {
                     ║  7. Salir                            ║
                     ╚══════════════════════════════════════╝
                     """);
-                System.out.print("Ingrese una opción: ");
 
                 try {
-                    opcion = sc.nextInt();
+                    opcion = aux_getInputInteger("");
                 } catch (InputMismatchException e) {
                     System.out.println("[ERROR] Por favor, ingrese un número válido.");
                     sc.next();
@@ -216,7 +163,7 @@ public class VistaLoader {
         }
     }
 
-    private void findBirthdayInNextNDays() { // todo poner a dos personas con nombres iguales en la misma fecha y ver qué sale
+    private void findBirthdayInNextNDays() { // todo (test) poner a dos personas con nombres iguales en la misma fecha y ver qué sale
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗
@@ -232,7 +179,7 @@ public class VistaLoader {
         }
     }
 
-    private void obtainFriendshipLevel() { // todo obtener el nivel de amistad entre dos personas de igual nombre
+    private void obtainFriendshipLevel() { // todo (test) obtener el nivel de amistad entre dos personas de igual nombre
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗
@@ -294,9 +241,14 @@ public class VistaLoader {
     }
 
     private String aux_getInputString(String texto) {
-        System.out.print("> "+texto);
+        final String GREEN = "\u001B[32m";
+        final String RESET = "\u001B[0m";
+
+        System.out.print(GREEN + "> " + texto + RESET);
+        System.out.flush();
         return sc.next();
     }
+
 
     private String aux_getEmail() {
         String email;
@@ -329,12 +281,16 @@ public class VistaLoader {
             sb.append(caracteres.charAt(random.nextInt(caracteres.length())));
         }
 
-        return sb.toString() + "@gmail.com";
+        return sb + "@gmail.com";
     }
 
 
     private int aux_getInputInteger(String texto) throws GrafoException {
-        System.out.print("> "+texto);
+        final String GREEN = "\u001B[32m";
+        final String RESET = "\u001B[0m";
+
+        System.out.print(GREEN + "> " + texto + RESET);
+        System.out.flush();
 
         try {
             return Integer.parseInt(sc.next());
@@ -342,6 +298,7 @@ public class VistaLoader {
             throw new GrafoException("[ERROR] Entrada no válida; digite un número válido.");
         }
     }
+
 
     private LocalDate aux_getDate() throws GrafoException {
         while (true) {
@@ -385,7 +342,7 @@ public class VistaLoader {
             System.out.println(lista);
             id = aux_getInputInteger("Id: ");
             nombre = g.getNombre(id);
-            System.out.println("Se ha seleccionado a "+nombre+" correctamente. Continúe con la operación"); // todo en vez de nombre poner el correo. hacer un método enGDP
+            System.out.println("Se ha seleccionado a "+g.getEmail(id)+" correctamente. Continúe con la operación");
         } else id = g.getId(nombre);
         return id;
     }

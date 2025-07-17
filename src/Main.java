@@ -9,10 +9,45 @@ public class Main {
 
     private static void debugGeneralInformation() {
         System.out.println("Pre-alpha version");
-//        System.out.print("""
-//                COMPILACIÓN 3, 12 DE JUNIO DE 2025
-//                HORA: 16:54
-//                PROGRAMA EN ESTADO SEMI-FUNCIONAL! REVISAR LISTA DE PENDIENTES (todo)
-//                """);
+
+        String[] estados = {
+                "[                    ]",
+                "[=                   ]",
+                "[==                  ]",
+                "[===                 ]",
+                "[====                ]",
+                "[=====               ]",
+                "[======              ]",
+                "[=======             ]",
+                "[========            ]",
+                "[=========           ]",
+                "[==========          ]",
+                "[===========         ]",
+                "[============        ]",
+                "[=============       ]",
+                "[==============      ]",
+                "[===============     ]",
+                "[================    ]",
+                "[=================   ]",
+                "[==================  ]",
+                "[=================== ]",
+                "[====================]"
+        };
+
+        System.out.print("Cargando programa ");
+        for (int i = 0; i < 2; i++) { // repite 3 veces la animación
+            for (String estado : estados) {
+                System.out.print("\rCargando programa " + estado);
+                System.out.flush();
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+        System.out.println();
     }
+
+
 }

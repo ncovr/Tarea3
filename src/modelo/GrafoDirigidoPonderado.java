@@ -268,7 +268,7 @@ public class GrafoDirigidoPonderado {
             }
         }
         if (distancia[p2] == Integer.MAX_VALUE) {
-            return "infinito";
+            return "infinito (no hay conexión entre ellos)";
         } else {
             return distancia[p2] + "";
         }

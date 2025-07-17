@@ -48,7 +48,7 @@ public class VistaLoader {
                 }
 
                 if (opcion != -1) {
-                    if (opcion == 1 || opcion == 2) arranque = false;
+                    if (opcion == 2) arranque = false;
                     switch (opcion) {
                         case 1 -> createPersona();
                         case 2 -> debugFunc();
@@ -113,21 +113,18 @@ public class VistaLoader {
                     ╚══════════════════════════════════════╝
                     """);
             System.out.println("Registrar a una persona en el sistema. Ingrese '-1' si desea cancelar la operación");
-            String nombre = aux_getInputString("Nombre: ");
-            if (nombre.equals("-1")) { // todo pulir el codigo para no tener ifs tan feos
-                System.out.println("Operación cancelada. Volviendo al menú principal...");
-                return;
-            }
-            int diaCumple = aux_getInputInteger("Día de cumpleaños: ");
+            String nombre = getInputCancelableString("Nombre: ");
+            if (nombre == null) return;
+            int diaCumple = getInputCancelableInt("Día de cumpleaños: ");
             if (diaCumple == -1) return;
-            int mesCumple = aux_getInputInteger("Mes de cumpleaños: ");
+            int mesCumple = getInputCancelableInt("Mes de cumpleaños: ");
             if (mesCumple == -1) return;
-            String profesion = aux_getInputString("Profesión: ");
-            if (profesion.equals("-1")) return;
+            String profesion = getInputCancelableString("Profesión: ");
+            if (profesion == null) return;
             String email = aux_getEmail();
             if (email.equals("-1")) return;
             g.func_createPersona(nombre, diaCumple, mesCumple, profesion, email);
-
+            arranque = false;
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
         }
@@ -183,7 +180,7 @@ public class VistaLoader {
                     """);
             System.out.println("Obtener los próximos cumpleaños dentro de k días. Ingrese '-1' si desea cancelar la operación");
             LocalDate fechaInicio = aux_getDate();
-            int n = aux_getInputInteger("Rango de días: ");
+            int n = getInputCancelableInt("Rango de días: ");
             if (n == -1) return;
             g.func_birthdayDayFind(n, fechaInicio);
         } catch (GrafoException e) {
@@ -203,7 +200,7 @@ public class VistaLoader {
             if (id1 == -1) return;
             int id2 = aux_getIdPersona();
             if (id2 == -1) return;
-            g.func_friendshipLevel(id1, id2);
+            System.out.println("Nivel de amistad: "+g.func_friendshipLevel(id1, id2));
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
         }
@@ -252,6 +249,25 @@ public class VistaLoader {
         g.getListaAdyacencia();
         g.debug_graphVisualizer();
     }
+
+    private String getInputCancelableString(String prompt) {
+        String input = aux_getInputString(prompt);
+        if (input.equals("-1")) {
+            System.out.println("Operación cancelada. Volviendo al menú principal...");
+            return null;
+        }
+        return input;
+    }
+
+    private Integer getInputCancelableInt(String prompt) {
+        int input = aux_getInputInteger(prompt);
+        if (input == -1) {
+            System.out.println("Operación cancelada. Volviendo al menú principal...");
+            return -1;
+        }
+        return input;
+    }
+
 
     private String aux_getInputString(String texto) {
         final String GREEN = "\u001B[32m";

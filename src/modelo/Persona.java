@@ -41,6 +41,15 @@ public class Persona {
         return dia + "/" + mes;
     }
 
+    public String getSerial(){
+        String serial = "";
+        if (this.dia < 10) serial += "0"+dia;
+        else serial += ""+dia;
+        if (this.mes < 10) serial += "0"+mes;
+        else serial += ""+mes;
+        return serial+="0000";
+    }
+
     public String getCuentaRegresiva() {
         LocalDate hoy = LocalDate.now();
 

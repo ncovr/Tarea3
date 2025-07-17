@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         debugGeneralInformation();
         VistaLoader vistaLoader = new VistaLoader();
-        vistaLoader.menu();
+        vistaLoader.printMenu();
     }
 
     private static void debugGeneralInformation() {

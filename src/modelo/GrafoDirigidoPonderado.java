@@ -179,6 +179,20 @@ public class GrafoDirigidoPonderado {
         sucessMessage();
     }
 
+    public void func_blockFriend(int id1, int id2, String fecha) {
+        exists(id1);
+        exists(id2);
+        fecha = fecha + "-1";
+
+        // Eliminamos la amistad (si existe) en ambos sentidos
+        grafo[id1].removeIf(a -> a.id == id2);
+        grafo[id2].removeIf(a -> a.id == id1);
+
+        // Establecemos que p1 bloquea a p2
+        grafo[id1].add(new Arista(id2, fecha));
+        System.out.println("¡"+getNombre(id1)+" ha bloqueado a "+getNombre(id2)+" con éxito!");
+    }
+
     /**
      * Encontrar las personas que estarán de cumpleaños dentro de los próximos k días. Enviar correo a sus amigos directos
      */
@@ -200,7 +214,7 @@ public class GrafoDirigidoPonderado {
             }
 
             if (!birthday.isAfter(endDate)) {
-                System.out.println(".: "+persona.nombre + ", el " + persona.getFechaCumple()+" :.");
+                System.out.println(".: "+persona.nombre + ", el " + serialToDateFormated(persona.getSerial(), 1)+" :.");
                 // Enviar correos a amigos directos
 
                 if (grafo[persona.id] == null || grafo[persona.id].isEmpty()) {
@@ -222,12 +236,12 @@ public class GrafoDirigidoPonderado {
      * Encontrar el 'na' entre p1 y p2
      */
 
-    public String func_friendshipLevel(String ps1, String ps2) {
-        if (ps1.equals(ps2)) return "No ingrese un nombre dos veces";
-        int p1 = getId(ps1);
-        int p2 = getId(ps2);
+    public String func_friendshipLevel(int p1, int p2) {
+        if (p1 == p2) throw new GrafoException("No ingrese dos veces la misma persona");
         exists(p1);
         exists(p2);
+        String ps1 = getNombre(p1);
+        String ps2 = getNombre(p2);
 
         // Verificar bloqueo directo
         for (Arista a : grafo[p1]) {
@@ -280,7 +294,11 @@ public class GrafoDirigidoPonderado {
         }
     }
 
-    public void debug_graphVisualizer() {
+    public void debug_graphVisualizer() throws GrafoException {
+        if (personas[1] == null) {
+            System.out.println("No hay datos para visualizar el grafo.");
+            return;
+        }
         Graph g = new SingleGraph("Grafo de Personas");
         g.setStrict(false);
         g.setAutoCreate(true);
@@ -304,7 +322,6 @@ public class GrafoDirigidoPonderado {
         );
 
         // Agregar nodos
-        if (personas.length < 1) throw new GrafoException("Error al crear el grafo: Sin registro de personas");
         for (int i = 1; i < personas.length; i++) {
             if (personas[i] != null) {
                 Node n = g.addNode(String.valueOf(i));
@@ -374,6 +391,13 @@ public class GrafoDirigidoPonderado {
 
     public String getNombre(int id) { // Dado un id: retornar el nombre de la persona
         return personas[id]+"";
+    }
+
+    public String getEmail(int id){
+        for (Persona p : personas) {
+            if (p.id == id) return p.email;
+        }
+        return "sin email";
     }
 
     public String serialToDateFormated(String serial, int mode) { // Transfoma una serie ddMMYYYY en una fecha escrita

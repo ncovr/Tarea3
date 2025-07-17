@@ -17,10 +17,15 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
+// todo mientras se esté en la operacion solicitando datos, si el usuario presiona una tecla determinada, se corta el proceso
+// todo si el sistema no tiene datos, no deberia mostrar la opcion de agregar una relacion de amistad y otras mas porque no hay datos
+// todo controlar que el usuario no ingrese datos en blanco
+// todo escribir secuencialmente en la consola
 public class VistaLoader {
 
     public Scanner sc = new Scanner(System.in);
     public GrafoDirigidoPonderado g = new GrafoDirigidoPonderado();
+    boolean arranque = true;
 
     public void menu() {
         while (true) {
@@ -71,6 +76,90 @@ public class VistaLoader {
         } // Fin del bucle while
     }
 
+    public void printMenu(){
+        while (true) {
+            if (arranque) { // El sistema no tiene nodos con los que operar. Ofrecer al usuario solo crear personas...
+                int opcion = -1;
+
+                System.out.print("""
+                    ╔══════════════════════════════════════╗
+                    ║          GESTOR DE AMISTADES         ║
+                    ╠══════════════════════════════════════╣
+                    ║      .:::: MENU PRINCIPAL ::::.      ║
+                    ╠══════════════════════════════════════╣
+                    ║  1. Insertar persona                 ║
+                    ║  2. Generar datos de testeo          ║
+                    ║  3. Salir                            ║
+                    ╚══════════════════════════════════════╝
+                    """);
+                System.out.print("Ingrese una opción: ");
+
+                try {
+                    opcion = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("[ERROR] Por favor, ingrese un número válido.");
+                    sc.next();
+                }
+
+                if (opcion != -1) {
+                    if (opcion == 1 || opcion == 2) arranque = false;
+                    switch (opcion) {
+                        case 1 -> createPersona();
+                        case 2 -> debugFunc();
+                        case 3 -> {
+                            System.out.println("Saliendo del programa...");
+                            return;
+                        }
+                        default ->
+                                System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
+                    }
+                }
+            } else {
+                int opcion = -1;
+                System.out.print("""
+                    ╔══════════════════════════════════════╗
+                    ║          GESTOR DE AMISTADES         ║
+                    ╠══════════════════════════════════════╣
+                    ║      .:::: MENU PRINCIPAL ::::.      ║
+                    ╠══════════════════════════════════════╣
+                    ║  1. Insertar persona                 ║
+                    ║  2. Agregar relación de amistad      ║
+                    ║  3. Bloquear a un amigo              ║
+                    ║  4. Cumpleaños próximos              ║
+                    ║  5. Nivel de amistad entre amigos    ║
+                    ║  6. Visualizar sistema               ║
+                    ║  7. Salir                            ║
+                    ╚══════════════════════════════════════╝
+                    """);
+                System.out.print("Ingrese una opción: ");
+
+                try {
+                    opcion = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("[ERROR] Por favor, ingrese un número válido.");
+                    sc.next();
+                }
+
+                if (opcion != -1) {
+                    switch (opcion) {
+                        case 1 -> createPersona();
+                        case 2 -> linkFriendship();
+                        case 3 -> blockFriendship();
+                        case 4 -> findBirthdayInNextNDays();
+                        case 5 -> obtainFriendshipLevel();
+                        case 6 -> visualizer();
+                        case 7 -> {
+                            System.out.println("Saliendo del programa...");
+                            return;
+                        }
+                        default ->
+                                System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
+                    }
+                }
+            }
+        }
+    }
+
     private void createPersona() {
         try {
             System.out.print("""                            
@@ -99,7 +188,6 @@ public class VistaLoader {
                     ╚═══════════════════════════════════════╝
                     """);
             System.out.println("Dadas dos personas se establece una amistad entre ellas");
-            // todo trabajando en esto
             int id1 = aux_getIdPersona();
             int id2 = aux_getIdPersona();
             String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
@@ -117,19 +205,16 @@ public class VistaLoader {
                     ╚══════════════════════════════════════╝
                     """);
             System.out.println("Dadas dos personas el primero bloquea al segundo");
-            String nombre1 = aux_getInputString("Nombre: ");
-            g.exists(nombre1);
-            String nombre2 = aux_getInputString("Nombre: ");
-            g.exists(nombre2);
+            int id1 = aux_getIdPersona();
+            int id2 = aux_getIdPersona();
             String fecha = aux_getDate().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
-
-            g.func_blockFriend(nombre1, nombre2, fecha);
+            g.func_blockFriend(id1, id2, fecha);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void findBirthdayInNextNDays() {
+    private void findBirthdayInNextNDays() { // todo poner a dos personas con nombres iguales en la misma fecha y ver qué sale
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗
@@ -145,7 +230,7 @@ public class VistaLoader {
         }
     }
 
-    private void obtainFriendshipLevel() {
+    private void obtainFriendshipLevel() { // todo obtener el nivel de amistad entre dos personas de igual nombre
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗
@@ -153,11 +238,9 @@ public class VistaLoader {
                     ╚══════════════════════════════════════╝
                     """);
             System.out.println("Dadas dos personas obtener su nivel de amistad");
-            String p1 = aux_getInputString("Nombre: ");
-            g.exists(p1);
-            String p2 = aux_getInputString("Nombre: ");
-            g.exists(p2);
-            g.func_friendshipLevel(p1, p2);
+            int id1 = aux_getIdPersona();
+            int id2 = aux_getIdPersona();
+            g.func_friendshipLevel(id1, id2);
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
         }
@@ -223,7 +306,7 @@ public class VistaLoader {
             intentos++;
 
             if (intentos > 2 || email.isEmpty()) {
-                email = generarCorreoRandom();
+                email = randomEmail();
                 System.out.println("Lo ha intentado muchas veces. Se asignará "+email+" como correo");
                 break;
             }
@@ -233,7 +316,7 @@ public class VistaLoader {
     }
 
 
-    private String generarCorreoRandom() {
+    private String randomEmail() {
         String caracteres = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -292,11 +375,6 @@ public class VistaLoader {
     }
 
     private int aux_getIdPersona(){
-        // Pedir el nombre de la persona para retornar el id
-        // Buscar si: existe/no existe en el sistema, y si existe más de una persona con ese nombre preguntar cuál elige
-
-
-        // todo mejorar el mensaje que solicita ambos nombres
         String nombre = aux_getInputString("Nombre: ");
         int id = 0;
         String lista = g.getListaInstancias(nombre);
@@ -304,7 +382,9 @@ public class VistaLoader {
             // Pedir la instancia correcta
             System.out.println(lista);
             id = aux_getInputInteger("Id: ");
-        }
+            nombre = g.getNombre(id);
+            System.out.println("Se ha seleccionado a "+nombre+" correctamente. Continúe con la operación"); // todo en vez de nombre poner el correo. hacer un método enGDP
+        } else id = g.getId(nombre);
         return id;
     }
 }

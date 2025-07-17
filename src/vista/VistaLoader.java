@@ -171,7 +171,7 @@ public class VistaLoader {
         }
     }
 
-    private void findBirthdayInNextNDays() { // todo (test) poner a dos personas con nombres iguales en la misma fecha y ver qué sale
+    private void findBirthdayInNextNDays() { // todo (test) poner a dos personas con nombres iguales en la misma fecha y ver qué sale -> sale solo una persona. corregir: mostrar una lista con los nombres, los id y los correos
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗
@@ -188,7 +188,7 @@ public class VistaLoader {
         }
     }
 
-    private void obtainFriendshipLevel() { // todo (test) obtener el nivel de amistad entre dos personas de igual nombre
+    private void obtainFriendshipLevel() {
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗

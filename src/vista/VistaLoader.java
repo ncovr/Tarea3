@@ -171,7 +171,7 @@ public class VistaLoader {
         }
     }
 
-    private void findBirthdayInNextNDays() { // todo (test) poner a dos personas con nombres iguales en la misma fecha y ver qué sale -> sale solo una persona. corregir: mostrar una lista con los nombres, los id y los correos
+    private void findBirthdayInNextNDays() {
         try {
             System.out.print("""                            
                     ╔══════════════════════════════════════╗

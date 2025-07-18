@@ -34,6 +34,10 @@ public class Persona {
         return "(" + sid + ")\t" + nombre + "\t" + email;
     }
 
+    public String getNombreYCorreo(){
+        return nombre+" ("+email+")";
+    }
+
     public String getNombreYid() {
         return nombre + " (" + id + ")";
     }

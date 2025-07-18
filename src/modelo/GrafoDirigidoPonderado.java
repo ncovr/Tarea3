@@ -180,30 +180,30 @@ public class GrafoDirigidoPonderado {
         if (k <= 0 || day == null) throw new GrafoException("Ingrese datos válidos");
         if (personas.length == 0) throw new GrafoException("No existen registros de personas en el sistema");
 
-        LocalDate endDate = day.plusDays(k);
+        LocalDate endDate = day.plusDays(k); // pesca el dia elegido y le suma k dias para almacenar en una variable la fecha tope
 
         System.out.println(".:: Personas con cumpleaños en los próximos " + k + " días ::.");
-        int c = 0;
-        for (Persona persona : personas) {
+        int c = 0; // Para retornar la cantidad de cumpleaños próximos
+        for (Persona persona : personas) { // Recorremos a todas las personas del sistema preguntando por sus cumpleaños
             if (persona == null) continue;
             c++;
-            LocalDate birthday = LocalDate.of(day.getYear(), persona.mes, persona.dia);
+            LocalDate birthday = LocalDate.of(day.getYear(), persona.mes, persona.dia); // Obtenemos la fecha de cumpleaños de la persona
             if (birthday.isBefore(day)) {
                 birthday = birthday.plusYears(1); // Si el cumpleaños ya pasó este año, lo buscamos para el próximo año, resuelve el problema en diciembre - enero
             }
 
-            if (!birthday.isAfter(endDate)) {
-                System.out.println(".: " + persona.nombre + ", el " + serialToDateFormated(persona.getSerial(), 1) + " :.");
+            if (!birthday.isAfter(endDate)) { // Si el cumpleaños está antes de la fecha límite
+                System.out.println(".: " + persona.getNombreYCorreo() + ", el " + serialToDateFormated(persona.getSerial(), 1)); // Imprimimos que la persona está x día
+
                 // Enviar correos a amigos directos
-
                 if (grafo[persona.id] == null || grafo[persona.id].isEmpty()) {
-                    throw new GrafoException("Sin amigos a los que enviar correos");
-                }
-
-                for (Arista a : grafo[persona.id]) {
-                    Persona amigo = personas[a.id];
-                    System.out.println("Correo a " + amigo.email + ": ¡Hola " + amigo.nombre + "! " +
-                            persona.nombre + " esta de cumpleaños " + persona.getCuentaRegresiva() + "!");
+                    System.out.println("Sin amigos a los que avisar cumpleaños; sin hay correos por enviar");
+                } else {
+                    for (Arista a : grafo[persona.id]) {
+                        Persona amigo = personas[a.id];
+                        System.out.println("Correo a " + amigo.email + ": ¡Hola " + amigo.nombre + "! " +
+                                persona.nombre + " esta de cumpleaños " + persona.getCuentaRegresiva() + "!");
+                    }
                 }
             }
         }

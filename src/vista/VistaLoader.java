@@ -45,6 +45,10 @@ public class VistaLoader {
                 } catch (InputMismatchException e) {
                     System.out.println("[ERROR] Por favor, ingrese un número válido.");
                     sc.next();
+                } catch (NumberFormatException e){
+                    System.out.println(e.getMessage());
+                } catch (GrafoException e) {
+                    System.out.println(e.getMessage());
                 }
 
                 if (opcion != -1) {
@@ -83,6 +87,10 @@ public class VistaLoader {
                 } catch (InputMismatchException e) {
                     System.out.println("[ERROR] Por favor, ingrese un número válido.");
                     sc.next();
+                } catch (NumberFormatException e){
+                    System.out.println(e.getMessage());
+                } catch (GrafoException e) {
+                    System.out.println(e.getMessage());
                 }
 
                 if (opcion != -1) {

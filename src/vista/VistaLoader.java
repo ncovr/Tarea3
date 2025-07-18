@@ -17,6 +17,8 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
+// todo permitir editar los valores de las personas
+
 public class VistaLoader {
 
     public Scanner sc = new Scanner(System.in);
@@ -65,7 +67,7 @@ public class VistaLoader {
                     }
                 }
             } else {
-                int opcion = -1;
+                int opcion = -1; // todo implementar punto 7
                 System.out.print("""
                     ╔══════════════════════════════════════╗
                     ║          GESTOR DE AMISTADES         ║
@@ -78,7 +80,8 @@ public class VistaLoader {
                     ║  4. Cumpleaños próximos              ║
                     ║  5. Nivel de amistad entre amigos    ║
                     ║  6. Visualizar sistema               ║
-                    ║  7. Salir                            ║
+                    ║  7. Editar datos                     ║
+                    ║  8. Salir                            ║
                     ╚══════════════════════════════════════╝
                     """);
 
@@ -101,7 +104,8 @@ public class VistaLoader {
                         case 4 -> findBirthdayInNextNDays();
                         case 5 -> obtainFriendshipLevel();
                         case 6 -> visualizer();
-                        case 7 -> {
+                        case 7 -> editor();
+                        case 8 -> {
                             System.out.println("Saliendo del programa...");
                             return;
                         }
@@ -216,6 +220,30 @@ public class VistaLoader {
 
     private void visualizer(){
         g.debug_graphVisualizer();
+    }
+
+    private void editor(){ // Permite editar los datos en el sistema
+        System.out.print("""                            
+                    ╔══════════════════════════════════════╗
+                    ║       .:::: EDITAR DATOS ::::.       ║
+                    ╠══════════════════════════════════════╣
+                    ║               PERSONA                ║
+                    ║  1. Nombre                           ║
+                    ║  2. Día de cumpleaños                ║
+                    ║  3. Mes de cumpleaños                ║
+                    ║  4. Ocupación                        ║
+                    ║  5. Correo electrónico               ║
+                    ║              RELACIONES              ║
+                    ║  6. Eliminar amistad                 ║
+                    ║  7. Eliminar bloqueo                 ║
+                    ║  8. Editar fecha de amistad          ║
+                    ║  9. Editar fecha de bloqueo          ║
+                    ║  10. Salir                           ║
+                    ╚══════════════════════════════════════╝
+                    """);
+        System.out.println("De las siguientes opciones eliga una");
+        // Editar en Persona: nombre, dia, mes, ocupación, correo Amistad/Bloqueo: eliminar, cambiar fecha
+
     }
 
     // CLASES AUXILIARES, CREADAS PARA AGILIZAR EL CÓDIGO PRINCIPAL

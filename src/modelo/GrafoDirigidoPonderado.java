@@ -55,6 +55,12 @@ public class GrafoDirigidoPonderado {
         System.out.println(".: "+nombre+ " creado exitosamente");
     }
 
+    public void func_createPersona(String nombre, LocalDate nacimiento, String ocupacion, String email) {
+        int dia = nacimiento.getDayOfMonth();
+        int mes = nacimiento.getMonthValue();
+        func_createPersona(nombre, dia, mes, ocupacion, email);
+    }
+
     /**
      * Para que p1 y p2 sean amigos, se debe establecer la relación en el grafo, creando una arista bidireccional con
      * peso, donde el peso es la serial (fecha más digito de estado: amistad/bloqueo)

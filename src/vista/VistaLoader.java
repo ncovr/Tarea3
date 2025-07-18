@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 // todo permitir editar los valores de las personas
+// todo cambiar el mensaje de exception "...contactar con el desarrollador"
 
 public class VistaLoader {
 
@@ -305,15 +306,6 @@ public class VistaLoader {
     }
 
 
-    private String aux_getInputString(String texto) {
-        final String GREEN = "\u001B[32m";
-        final String RESET = "\u001B[0m";
-
-        System.out.print(GREEN + "> " + texto + RESET);
-        System.out.flush();
-        return sc.next();
-    }
-
 
     private String aux_getEmail() {
         String email;
@@ -349,12 +341,42 @@ public class VistaLoader {
         return sb + "@gmail.com";
     }
 
+    private String aux_getInputString(String texto) {
+        final String GREEN = "\u001B[32m";
+        final String RESET = "\u001B[0m";
+
+        System.out.print(GREEN + "> ");
+        for (char c : texto.toCharArray()) {
+            System.out.print(c);
+            System.out.flush();
+            try {
+                Thread.sleep(30); // Ajusta el tiempo según prefieras
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        System.out.print(RESET);
+        System.out.flush();
+
+        return sc.next();
+    }
+
 
     private int aux_getInputInteger(String texto) throws GrafoException {
         final String GREEN = "\u001B[32m";
         final String RESET = "\u001B[0m";
 
-        System.out.print(GREEN + "> " + texto + RESET);
+        System.out.print(GREEN + "> ");
+        for (char c : texto.toCharArray()) {
+            System.out.print(c);
+            System.out.flush();
+            try {
+                Thread.sleep(30); // Puedes ajustar la velocidad aquí (milisegundos)
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        System.out.print(RESET);
         System.out.flush();
 
         try {
@@ -363,6 +385,7 @@ public class VistaLoader {
             throw new GrafoException("[ERROR] Entrada no válida; digite un número válido.");
         }
     }
+
 
 
     private LocalDate aux_getDate() throws GrafoException {
@@ -412,89 +435,3 @@ public class VistaLoader {
         return id;
     }
 }
-
-/*
-¿Que esperabas encontrar aqui Orvar, la carpeta del git?
-Desde hoy dejaré liricas de canciones.
-Le quitas lo divertido a la vida, pero bueno, ya que.
-
-https://youtu.be/Soy4jGPHr3g
-
-doushite sugu shitte shimau no
-kyoushin de kurushindeshi batou
-koushin de furu inseki masshou-ka?
-warukunai
-
-kyoumi nee sukui hade kandou
-joubi nee kusuri tabe BAD
-chou hidee furu mitame angou-ka?
-kane ni yoru
-
-joushiki nee kurui ppade rantou
-houchi gee suru in kya de bando
-soushin de kurushii dame Cancel wa?
-kusa haeru
-
-doushite sugu miteshimau no
-doushite sugu itte shimau no
-doushite sugu koware chau ka na
-(papara para para)
-
-kin mirai shika katan
-shoppingu mouru no gendai konpyuu
-shou uindou shi ka katan
-monti houru no keihi de pinbooru
-
-oiru massaaji hyaku-bu kousu ashiyu-tsuki
-yuzu o soete
-
-te te te teto teto te te te tetorisu
-doushite konna me ni ni ni
-
-kyoumi ga nai koto honki janai mono zenbu atomawashi de
-shitteru koto wa shiranpuri watashi wa owatteru
-
-hazukashii kako shitteru yatsu-ra no kioku kesa sete
-meiwaku kakete gomen tteba nee darekatasukete
-
-moushin de sugu hika re chau no
-kyoushin de sugu hika re chau no
-shiritakunai shiritakunai shiritakunai
-(ta tara tara tara)
-
-mou minee sugu hika re SAD
-joukin de kurui-tate MAD
-ikitakunai ikitakunai ikitakunai
-baai bai
-
-rinji kyuugyou sentaku booru
-naichingeeru no haishin geemu
-meishi koukan no mei shiin
-shakkin booru de chinchiro haibooru
-
-onsen ryokou sanpaku yokka shokuji-tsuki
-hayaku ikitee
-
-te te te teto teto
-te te te tetorisu
-kyoukan-sei shuuchi chi chi
-
-utsu toka sou toka isogashiku te nemure nai wa kyou mo
-dare ka hayaku nagutte kizetsu sa sete kure yo
-
-jinsei kyanseru kyanseru kaiwai
-bon'yari to shita fuan
-watashi no sei watashi ga warui yo souda yo
-
-kyoumi ga dete mo honki de yatte mo zenbu karamawari de
-shiranai kuse ni usotsuki watashi wa owatteru
-
-hazukashii kako shitteru yatsu-ra no kioku kesa sete
-meiwaku kakete gomen tteba
-nee darekatasukete
-
-meiwaku kakete gomen tteba
-nee dare ka yurushite
-
-~AB
- */

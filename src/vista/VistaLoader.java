@@ -12,13 +12,9 @@ import modelo.GrafoDirigidoPonderado;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.IllegalFormatException;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
-
-// todo permitir editar los valores de las personas
 
 public class VistaLoader {
 
@@ -26,29 +22,29 @@ public class VistaLoader {
     public GrafoDirigidoPonderado g = new GrafoDirigidoPonderado();
     boolean arranque = true;
 
-    public void printMenu(){
+    public void printMenu() {
         while (true) {
             if (arranque) { // El sistema no tiene nodos con los que operar. Ofrecer al usuario solo crear personas...
                 int opcion = -1;
 
                 System.out.print("""
-                    ╔══════════════════════════════════════╗
-                    ║          GESTOR DE AMISTADES         ║
-                    ╠══════════════════════════════════════╣
-                    ║      .:::: MENU PRINCIPAL ::::.      ║
-                    ╠══════════════════════════════════════╣
-                    ║  1. Insertar persona                 ║
-                    ║  2. Generar datos de testeo          ║
-                    ║  3. Salir                            ║
-                    ╚══════════════════════════════════════╝
-                    """);
+                        ╔══════════════════════════════════════╗
+                        ║          GESTOR DE AMISTADES         ║
+                        ╠══════════════════════════════════════╣
+                        ║      .:::: MENU PRINCIPAL ::::.      ║
+                        ╠══════════════════════════════════════╣
+                        ║  1. Insertar persona                 ║
+                        ║  2. Generar datos de testeo          ║
+                        ║  3. Salir                            ║
+                        ╚══════════════════════════════════════╝
+                        """);
 
                 try {
                     opcion = aux_getInputInteger("");
                 } catch (InputMismatchException e) {
                     System.out.println("[ERROR] Ingrese un numero válido");
                     sc.next();
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     System.out.println(e.getMessage());
                 } catch (GrafoException e) {
                     System.out.println(e.getMessage());
@@ -63,56 +59,51 @@ public class VistaLoader {
                             System.out.println("Saliendo del programa...");
                             return;
                         }
-                        default ->
-                                System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
+                        default -> System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
                     }
                 }
             } else {
-                int opcion = -1; // todo implementar punto 7
+                int opcion = -1;
                 System.out.print("""
-                    ╔══════════════════════════════════════╗
-                    ║          GESTOR DE AMISTADES         ║
-                    ╠══════════════════════════════════════╣
-                    ║      .:::: MENU PRINCIPAL ::::.      ║
-                    ╠══════════════════════════════════════╣
-                    ║  1. Insertar persona                 ║
-                    ║  2. Agregar relación de amistad      ║
-                    ║  3. Bloquear a un amigo              ║
-                    ║  4. Cumpleaños próximos              ║
-                    ║  5. Nivel de amistad entre amigos    ║
-                    ║  6. Visualizar sistema               ║
-                    ║  7. Editar datos                     ║
-                    ║  8. Salir                            ║
-                    ╚══════════════════════════════════════╝
-                    """);
+                        ╔══════════════════════════════════════╗
+                        ║          GESTOR DE AMISTADES         ║
+                        ╠══════════════════════════════════════╣
+                        ║      .:::: MENU PRINCIPAL ::::.      ║
+                        ╠══════════════════════════════════════╣
+                        ║  1. Insertar persona                 ║
+                        ║  2. Agregar relación de amistad      ║
+                        ║  3. Bloquear a un amigo              ║
+                        ║  4. Cumpleaños próximos              ║
+                        ║  5. Nivel de amistad entre amigos    ║
+                        ║  6. Visualizar sistema               ║
+                        ║  7. Editar datos                     ║
+                        ║  8. Salir                            ║
+                        ╚══════════════════════════════════════╝
+                        """);
 
                 try {
                     opcion = aux_getInputInteger("");
+                    if (opcion != -1) {
+                        switch (opcion) {
+                            case 1 -> createPersona();
+                            case 2 -> linkFriendship();
+                            case 3 -> blockFriendship();
+                            case 4 -> findBirthdayInNextNDays();
+                            case 5 -> obtainFriendshipLevel();
+                            case 6 -> visualizer();
+                            case 7 -> editor();
+                            case 8 -> {
+                                System.out.println("Saliendo del programa...");
+                                return;
+                            }
+                            default -> System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
+                        }
+                    }
                 } catch (InputMismatchException e) {
                     System.out.println("[ERROR] Por favor, ingrese un número válido.");
                     sc.next();
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException | GrafoException e) {
                     System.out.println(e.getMessage());
-                } catch (GrafoException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                if (opcion != -1) {
-                    switch (opcion) {
-                        case 1 -> createPersona();
-                        case 2 -> linkFriendship();
-                        case 3 -> blockFriendship();
-                        case 4 -> findBirthdayInNextNDays();
-                        case 5 -> obtainFriendshipLevel();
-                        case 6 -> visualizer();
-                        case 7 -> editor();
-                        case 8 -> {
-                            System.out.println("Saliendo del programa...");
-                            return;
-                        }
-                        default ->
-                                System.out.println("[ERROR] Opcion seleccionada no válida, intente nuevamente.");
-                    }
                 }
             }
         }
@@ -129,7 +120,6 @@ public class VistaLoader {
             String nombre = getInputCancelableString("Nombre: ");
             if (nombre == null) return;
             LocalDate nac = aux_getDate(1);
-            // todo si nac esta mal, se debe manejar la situación
             String profesion = getInputCancelableString("Profesión: ");
             if (profesion == null) return;
             String email = aux_getEmail();
@@ -211,51 +201,109 @@ public class VistaLoader {
             if (id1 == -1) return;
             int id2 = aux_getIdPersona();
             if (id2 == -1) return;
-            System.out.println("Nivel de amistad: "+g.func_friendshipLevel(id1, id2));
+            System.out.println("Nivel de amistad: " + g.func_friendshipLevel(id1, id2));
         } catch (GrafoException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void visualizer(){
+    private void visualizer() {
         g.debug_graphVisualizer();
     }
 
-    private void editor(){
+    private void editor() throws GrafoException{
+
+        /*
+                ╠══════════════════════════════════════╣
+                ║         .:: RELACIONES ::.           ║
+                ║                                      ║
+                ║  5. Eliminar amistad                 ║
+                ║  6. Eliminar bloqueo                 ║
+                ║  7. Editar fecha de amistad          ║
+                ║  8. Editar fecha de bloqueo          ║
+         */
+
         System.out.println("De las siguientes opciones eliga una");
         System.out.print("""                            
-                    ╔══════════════════════════════════════╗
-                    ║       .:::: EDITAR DATOS ::::.       ║
-                    ╠══════════════════════════════════════╣
-                    ║           .- PERSONA -.              ║
-                    ║  1. Nombre                           ║
-                    ║  2. Fecha de nacimiento              ║
-                    ║  3. Ocupación                        ║
-                    ║  4. Correo electrónico               ║
-                    ║          .- RELACIONES -.            ║
-                    ║  5. Eliminar amistad                 ║
-                    ║  6. Eliminar bloqueo                 ║
-                    ║  7. Editar fecha de amistad          ║
-                    ║  8. Editar fecha de bloqueo          ║
-                    ║  9. Salir                            ║
-                    ╚══════════════════════════════════════╝
-                    """);
+                ╔══════════════════════════════════════╗
+                ║       .:::: EDITAR DATOS ::::.       ║
+                ╠══════════════════════════════════════╣
+                ║           .:: PERSONA ::.            ║
+                ║                                      ║
+                ║  1. Nombre                           ║
+                ║  2. Fecha de nacimiento              ║
+                ║  3. Ocupación                        ║
+                ║  4. Correo electrónico               ║
+                ╠══════════════════════════════════════╣
+                ║  9. Salir                            ║
+                ╚══════════════════════════════════════╝
+                """);
         int op = aux_getInputInteger("");
-        switch (op) { // todo implementar las funciones
-            case 1 -> edit_name();
-            case 2 -> edit_nac();
-            case 3 -> edit_ocup();
-            case 4 -> edit_email();
-            case 5 -> edit_deleteAmistad();
-            case 6 -> edit_deleteBloqueo();
-            case 7 -> edit_fechaAmistad();
-            case 8 -> edit_fechaBloqueo();
-            case 9 -> // salir
-            default:
-        }
-        // Editar en Persona: nombre, dia, mes, ocupación, correo Amistad/Bloqueo: eliminar, cambiar fecha
 
+        try{
+            switch (op) {
+                case 1 -> edit_name();
+                case 2 -> edit_nac();
+                case 3 -> edit_ocup();
+                case 4 -> edit_email();
+//            case 5 -> edit_deleteAmistad();
+//            case 6 -> edit_deleteBloqueo();
+//            case 7 -> edit_fechaAmistad();
+//            case 8 -> edit_fechaBloqueo();
+                case 9 -> {
+                    System.out.println("Volviendo al menú principal...");
+                    return;
+                }
+                default -> System.out.println("[ERROR] Opción no válida, intente nuevamente.");
+            }
+            // Editar en Persona: nombre, dia, mes, ocupación, correo Amistad/Bloqueo: eliminar, cambiar fecha
+
+        } catch (GrafoException e) {
+            throw new GrafoException("[ERROR] " + e.getMessage());
+        }
     }
+
+    // Funciones del editor de datos
+
+    private void edit_name() {
+        System.out.println("Editar nombre de una persona");
+        int id = aux_getIdPersona();
+        if (id == -1) return;
+        String nuevoNombre = getInputCancelableString("Nuevo nombre: ");
+        if (nuevoNombre == null) return;
+
+        g.modify_nombre(id, nuevoNombre);
+    }
+
+    private void edit_nac() {
+        System.out.println("Editar fecha de nacimiento de una persona");
+        int id = aux_getIdPersona();
+        if (id == -1) return;
+        LocalDate nuevaFecha = aux_getDate(1);
+
+        g.modify_fechaNacimiento(id, nuevaFecha.getDayOfMonth(), nuevaFecha.getMonthValue());
+    }
+
+    private void edit_ocup() {
+        System.out.println("Editar ocupación de una persona");
+        int id = aux_getIdPersona();
+        if (id == -1) return;
+        String nuevaOcupacion = getInputCancelableString("Nueva ocupación: ");
+        if (nuevaOcupacion == null) return;
+
+        g.modify_ocupacion(id, nuevaOcupacion);
+    }
+
+    private void edit_email() {
+        System.out.println("Editar correo electrónico de una persona");
+        int id = aux_getIdPersona();
+        if (id == -1) return;
+        String nuevoEmail = aux_getEmail();
+        if (nuevoEmail.equals("-1")) return;
+
+        g.modify_email(id, nuevoEmail);
+    }
+
 
     // Métodos y funciones auxiliares
     private void debugFunc() {
@@ -319,13 +367,13 @@ public class VistaLoader {
         int intentos = 0;
 
         do {
-            if(intentos > 0) System.out.println("El correo ingresado ya está en el sistema. Ingrese uno distinto");
+            if (intentos > 0) System.out.println("El correo ingresado ya está en el sistema. Ingrese uno distinto");
             email = aux_getInputString("Correo electrónico: ");
             intentos++;
 
             if (intentos > 2 || email.isEmpty()) {
                 email = randomEmail();
-                System.out.println("Lo ha intentado muchas veces. Se asignará "+email+" como correo");
+                System.out.println("Lo ha intentado muchas veces. Se asignará " + email + " como correo");
                 break;
             }
         } while (!g.verificarEmail(email));
@@ -347,7 +395,7 @@ public class VistaLoader {
 
     private String aux_getInputString(String texto) {
         final String GREEN = "\u001B[32m";
-        final String RED   = "\u001B[31m";
+        final String RED = "\u001B[31m";
         final String RESET = "\u001B[0m";
 
         System.out.print(GREEN + "> ");
@@ -375,7 +423,7 @@ public class VistaLoader {
 
     private int aux_getInputInteger(String texto) {
         final String GREEN = "\u001B[32m";
-        final String RED   = "\u001B[31m";
+        final String RED = "\u001B[31m";
         final String RESET = "\u001B[0m";
 
         System.out.print(GREEN + "> ");
@@ -464,17 +512,15 @@ public class VistaLoader {
         }
     }
 
-
-
-    private int aux_getIdPersona(){
+    private int aux_getIdPersona() {
         String nombre = aux_getInputString("Nombre: ");
         int id = 0;
         String lista = g.getListaInstancias(nombre);
-        if (!lista.isBlank()){
+        if (!lista.isBlank()) {
             // Pedir la instancia correcta
             System.out.println(lista);
             id = aux_getInputInteger("Id: ");
-            System.out.println("Se ha seleccionado a "+g.getEmail(id)+" correctamente. Continúe con la operación");
+            System.out.println("Se ha seleccionado a " + g.getEmail(id) + " correctamente. Continúe con la operación");
         } else id = g.getId(nombre);
         return id;
     }

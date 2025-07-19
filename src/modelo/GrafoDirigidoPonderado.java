@@ -455,4 +455,36 @@ public class GrafoDirigidoPonderado {
             System.out.println();
         }
     }
+
+    public void modify_nombre(int id, String nombre) throws GrafoException {
+        if (id < 0 || id >= personas.length) throw new GrafoException("Id no válido");
+        if (getId(nombre) != -1) throw new GrafoException("El nombre ya está en uso");
+        String val_anterior = personas[id].nombre;
+        personas[id].nombre = nombre;
+        System.out.println(".: Nombre de " + val_anterior + " modificado exitosamente a " + nombre);
+    }
+
+    public void modify_ocupacion(int id, String ocupacion) throws GrafoException {
+        if (id < 0 || id >= personas.length) throw new GrafoException("Id no válido");
+        String val_anterior = personas[id].ocupacion;
+        personas[id].ocupacion = ocupacion;
+        System.out.println(".: Ocupación de " + val_anterior + " modificada exitosamente a " + ocupacion);
+    }
+
+    public void modify_fechaNacimiento(int id, int dia, int mes) throws GrafoException {
+        if (id < 0 || id >= personas.length) throw new GrafoException("Id no válido");
+        if (dia < 1 || dia > 31 || mes < 1 || mes > 12) throw new GrafoException("Fecha de nacimiento no válida");
+        String val_anterior = personas[id].getFechaNacimiento();
+        personas[id].dia = dia;
+        personas[id].mes = mes;
+        System.out.println(".: Fecha de nacimiento de " + val_anterior + " modificada exitosamente a " + dia + "/" + mes);
+    }
+
+    public void modify_email(int id, String email) throws GrafoException {
+        if (id < 0 || id >= personas.length) throw new GrafoException("Id no válido");
+        if (!verificarEmail(email)) throw new GrafoException("El email ya está en uso");
+        String val_anterior = personas[id].email;
+        personas[id].email = email;
+        System.out.println(".: Email de " + val_anterior + " modificado exitosamente a " + email);
+    }
 }

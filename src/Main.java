@@ -62,7 +62,4 @@ public class Main {
         System.out.print("\r                              \r");
         System.out.flush();
     }
-
-
-
 }

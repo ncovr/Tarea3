@@ -1,3 +1,9 @@
+/* TRABAJO REALIZADO POR:
+ * - Nicolas Verdugo Barrera
+ * - Diego Mercado Herrera
+ * - Ariel Bobadilla Barriga
+ */
+
 import vista.VistaLoader;
 
 public class Main {
@@ -9,7 +15,7 @@ public class Main {
 
     private static void debugGeneralInformation() {
         System.out.println("Gestor de Amistades. Desarrollado por NV, AB y DM");
-        System.out.println("Alpha-version");
+        System.out.println("Final-Release-version");
 
 
         String[] estados = {

@@ -1,3 +1,9 @@
+/* TRABAJO REALIZADO POR:
+ * - Nicolas Verdugo Barrera
+ * - Diego Mercado Herrera
+ * - Ariel Bobadilla Barriga
+ */
+
 package modelo;
 
 import java.time.LocalDate;

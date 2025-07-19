@@ -1,26 +1,33 @@
+/* TRABAJO REALIZADO POR:
+ * - Nicolas Verdugo Barrera
+ * - Diego Mercado Herrera
+ * - Ariel Bobadilla Barriga
+ */
+
 package modelo;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import exceptions.GrafoException;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class GrafoDirigidoPonderado {
+public class GrafoDirigidoEtiquetado {
     private Persona[] personas = new Persona[2]; // Diccionario de personas
     private LinkedList<Arista>[] grafo = new LinkedList[2]; // Lista de adyacencia para representar el grafo
     private int idCounter = 1; // Ayuda a generar Id's en orden correlativo según se van creando nuevas personas
 
     /**
-     * Dado que el grafo es dirigido, cuando se inicia una amistad se crea una conexión bidireccional, pero cuando p1
-     * bloquea a p2, se crea esa conexión unidireccionalmente; luego p2 ya no está conectado con p1 pero se registra
-     * el bloqueo efectivamente
+     * El grafo en esta implementación es un grafo dirigido etiquetado, donde cada nodo representa a una persona (mediante
+     * su id) y las conexiones entre los nodos pueden representar una amistad o un bloqueo.
+     *
+     * Sean p1, p2 dos personas distintas pertenecientes al conjunto de personas en el grafo, si p1 es amiga de p2, ambos
+     * están conectados bidireccionalmente. En cambio, si p1 bloquea a p2, la arista solo apunta de p1 a p2.
      */
 
-    public GrafoDirigidoPonderado() {
+    public GrafoDirigidoEtiquetado() {
     }
 
     /*

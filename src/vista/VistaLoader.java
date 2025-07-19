@@ -7,7 +7,7 @@
 package vista;
 
 import exceptions.GrafoException;
-import modelo.GrafoDirigidoPonderado;
+import modelo.GrafoDirigidoEtiquetado;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class VistaLoader {
 
     public Scanner sc = new Scanner(System.in);
-    public GrafoDirigidoPonderado g = new GrafoDirigidoPonderado();
+    public GrafoDirigidoEtiquetado g = new GrafoDirigidoEtiquetado();
     boolean arranque = true;
 
     public void printMenu() {
@@ -211,7 +211,7 @@ public class VistaLoader {
         g.debug_graphVisualizer();
     }
 
-    private void editor() throws GrafoException{
+    private void editor() throws GrafoException {
 
         /*
                 ╠══════════════════════════════════════╣
@@ -240,7 +240,7 @@ public class VistaLoader {
                 """);
         int op = aux_getInputInteger("");
 
-        try{
+        try {
             switch (op) {
                 case 1 -> edit_name();
                 case 2 -> edit_nac();

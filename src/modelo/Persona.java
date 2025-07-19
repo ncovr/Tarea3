@@ -34,12 +34,12 @@ public class Persona {
         return "(" + sid + ")\t" + nombre + "\t" + email;
     }
 
-    public String getNombreYid() {
-        return nombre + " (" + id + ")";
+    public String getNombreYCorreo(){
+        return nombre+" ("+email+")";
     }
 
-    public String getFechaCumple() {
-        return dia + "/" + mes;
+    public String getNombreYid() {
+        return nombre + " (" + id + ")";
     }
 
     public String getSerial() {
@@ -77,7 +77,30 @@ public class Persona {
         return response;
     }
 
+    public String getFechaNacimiento() {
+        return String.format("%02d/%02d", dia, mes);
+    }
+
     public String getCorreosElectronicos() {
         return email;
+    }
+
+    // metodos set
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setFechaNacimiento(int dia, int mes) {
+        this.dia = dia;
+        this.mes = mes;
+    }
+
+    public void setOcupacion(String ocupacion) {
+        this.ocupacion = ocupacion;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

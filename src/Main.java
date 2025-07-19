@@ -8,7 +8,9 @@ public class Main {
     }
 
     private static void debugGeneralInformation() {
-        System.out.println("Pre-alpha version");
+        System.out.println("Gestor de Amistades. Desarrollado por NV, AB y DM");
+        System.out.println("Alpha-version");
+
 
         String[] estados = {
                 "[                    ]",
@@ -35,7 +37,7 @@ public class Main {
         };
 
         System.out.print("Cargando programa ");
-        for (int i = 0; i < 2; i++) { // repite 3 veces la animación
+        for (int i = 0; i < 2; i++) {
             for (String estado : estados) {
                 System.out.print("\rCargando programa " + estado);
                 System.out.flush();
@@ -46,8 +48,18 @@ public class Main {
                 }
             }
         }
-        System.out.println();
+
+        // Mensaje final
+        System.out.print("\rPrograma cargado con exito         ");
+        System.out.flush();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        // Borra la línea para limpiar la consola
+        System.out.print("\r                              \r");
+        System.out.flush();
     }
-
-
 }
